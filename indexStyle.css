@@ -18,12 +18,8 @@ a:active {
   background-color: rgba(0, 0, 0, 0.363);
 }
 
-.ogrenci-liste {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  background-color: rgba(128, 128, 128, 0.237);
-}
-
-.el {
-  border: 2px solid black;
+table,
+th,
+td {
+  border: 1px solid black;
 }
