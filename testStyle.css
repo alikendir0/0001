@@ -17,8 +17,3 @@ a:hover {
 a:active {
   background-color: rgba(0, 0, 0, 0.363);
 }
-
-.ogrenci-liste {
-  max-width: 125px;
-  background-color: rgba(128, 128, 128, 0.237);
-}
