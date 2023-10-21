@@ -1,0 +1,20 @@
+body {
+  font-size: 30px;
+}
+
+a:link {
+  color: #1098ad;
+  text-decoration: none;
+}
+
+a:visited {
+  color: #1098ad;
+}
+
+a:hover {
+  color: rgb(47, 108, 93);
+}
+
+a:active {
+  background-color: rgba(0, 0, 0, 0.363);
+}
