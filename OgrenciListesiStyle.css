@@ -1,7 +1,16 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+}
+
 body {
-  font-size: 30px;
+  font-size: 24px;
   display: flex;
   flex-direction: column;
+  font-family: sans-serif;
+  background-color: #a5d8ff;
+  height: 800px;
 }
 
 a:link {
@@ -21,12 +30,80 @@ a:active {
   background-color: rgba(0, 0, 0, 0.363);
 }
 
-table,
-th,
-td {
-  border: 1px solid black;
+.addRow {
+  font: bold;
+  float: right;
+  background-color: white;
+  color: #495057;
+  border: none;
+  margin: 24px 24px;
+  padding: 20px 20px;
+  border-radius: 30px;
+  display: flex;
 }
 
-.addRow {
-  float: right;
+.Ad {
+  width: 250px;
+}
+
+.Soyad {
+  width: 250px;
+}
+
+.tcNo {
+  width: 300px;
+}
+.ogrenciNo {
+  width: 275px;
+}
+table {
+  border-collapse: collapse;
+  background-color: white;
+  margin: auto;
+  border-radius: 12px;
+  margin-bottom: 48px;
+}
+tr {
+  border-top: 1px solid #ced4da;
+}
+th {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #495057;
+  text-align: center;
+}
+td {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  color: #495057;
+  text-align: center;
+}
+
+tr:first-child {
+  border-top: none;
+}
+tr:last-child {
+  border-bottom: none;
+}
+
+.navigation {
+  margin: auto;
+  padding: 24px 24px;
+  text-align: center;
+  background-color: white;
+  border-radius: 12px;
+}
+
+.page {
+  display: flex;
+  margin-bottom: 24px;
+}
+
+.addIcon {
+  height: 16px;
+  width: 16px;
+}
+
+.ogrenci-ekle {
+  margin: auto;
 }

@@ -10,7 +10,21 @@
   <body>
     <nav>
       <button type="button" class="addRow" onclick="addRow()">
-        Öğrenci Ekle
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="addIcon"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 4.5v15m7.5-7.5h-15"
+          />
+        </svg>
+        <p class="ogrenci-ekle">Öğrenci Ekle</p>
       </button>
     </nav>
     <table class="container">
@@ -52,8 +66,11 @@
       </tr>
     </table>
   </body>
-  <nav>
-    <p>Öğrenci Listesi-<a href="DersListesi.html">Ders Listesi</a></p>
+  <nav class="navigation">
+    <div class="page">
+      <p>Öğrenci Listesi</p>
+      -<a href="DersListesi.html">Ders Listesi</a>
+    </div>
     <a href="index.html">Çıkış</a>
   </nav>
 </html>

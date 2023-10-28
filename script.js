@@ -2,21 +2,22 @@ function addRow() {
   let temp = true;
   let ad = prompt("Ad Girin:");
   while (temp) {
-    if (Number.isInteger(ad)) {
+    if (!(ad === null || ad === "")) {
       temp = false;
     } else {
-      ad = prompt("Geçersiz Karakter Lütfen Gerçek Bir Ad Girin:");
       temp = true;
+      ad = prompt("Ad Girin:");
     }
   }
 
   let soyad = prompt("Soyad Girin:");
+  temp = true;
   while (temp) {
-    if (Number.isInteger(soyad)) {
+    if (!(soyad === null || soyad === "")) {
       temp = false;
     } else {
-      soyad = prompt("Geçersiz Karakter Lütfen Gerçek Bir Soyad Girin:");
       temp = true;
+      soyad = prompt("Soyad Girin:");
     }
   }
 
@@ -31,7 +32,7 @@ function addRow() {
     }
   }
 
-  let ogrenciNo = prompt("Öğrencı Numarasını Girin:");
+  let ogrenciNo = prompt("Öğrenci Numarasını Girin:");
   temp = true;
   while (temp) {
     if (Math.floor(Math.log10(ogrenciNo)) + 1 == 10) {
@@ -56,6 +57,8 @@ function addRow() {
   newRow.appendChild(tcNoCell);
   newRow.appendChild(ogrenciNoCell);
 
-  const table = document.querySelector("table");
-  table.appendChild(newRow);
+  const container = document.querySelector(".container");
+  container.appendChild(newRow);
 }
+
+window.onload = function () {};
