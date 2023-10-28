@@ -26,3 +26,7 @@ th,
 td {
   border: 1px solid black;
 }
+
+.addRow {
+  float: right;
+}
