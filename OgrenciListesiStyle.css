@@ -42,19 +42,29 @@ a:active {
   gap: -5px;
 }
 
-.Ad {
+.Ad-th {
   width: 250px;
 }
 
-.Soyad {
+.Soyad-th {
   width: 250px;
 }
 
-.tcNo {
+.tcNo-th {
   width: 300px;
 }
-.ogrenciNo {
+.ogrenciNo-th {
   width: 275px;
+}
+
+.noData {
+  border-collapse: collapse;
+  background-color: white;
+  margin: auto;
+  border-radius: 12px;
+  margin-bottom: 48px;
+  padding: 24px 30px;
+  display: none;
 }
 table {
   border-collapse: collapse;
@@ -62,6 +72,7 @@ table {
   margin: auto;
   border-radius: 12px;
   margin-bottom: 48px;
+  display: none;
 }
 tr {
   border-top: 1px solid #ced4da;
@@ -102,8 +113,4 @@ tr:last-child {
 .addIcon {
   height: 16px;
   width: 16px;
-}
-
-.ogrenci-ekle {
-  margin: auto;
 }

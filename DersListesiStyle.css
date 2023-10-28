@@ -52,6 +52,7 @@ table {
   margin: auto;
   border-radius: 12px;
   margin-bottom: 48px;
+  display: none;
 }
 tr {
   border-top: 1px solid #ced4da;
@@ -75,23 +76,33 @@ tr:first-child {
 tr:last-child {
   border-bottom: none;
 }
-.ders {
+.ders-th {
   width: 200px;
 }
 
-.fakulte {
+.fakulte-th {
   width: 350px;
 }
 
-.zaman {
+.zaman-th {
   width: 200px;
 }
 
-.sinif {
+.sinif-th {
   width: 150px;
 }
-.ogretici {
+.ogretici-th {
   width: 350px;
+}
+
+.noData {
+  border-collapse: collapse;
+  background-color: white;
+  margin: auto;
+  border-radius: 12px;
+  margin-bottom: 48px;
+  padding: 24px 30px;
+  display: none;
 }
 
 .navigation {

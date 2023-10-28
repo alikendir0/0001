@@ -35,11 +35,11 @@ function addRow() {
   let ogrenciNo = prompt("Öğrenci Numarasını Girin:");
   temp = true;
   while (temp) {
-    if (Math.floor(Math.log10(ogrenciNo)) + 1 == 10) {
+    if (Math.floor(Math.log10(ogrenciNo)) + 1 == 6) {
       temp = false;
     } else {
       temp = true;
-      ogrenciNo = prompt("Öğrenci Nurmasını Girin (10 rakamdan oluşmalı):");
+      ogrenciNo = prompt("Öğrenci Nurmasını Girin (6 rakamdan oluşmalı):");
     }
   }
 
@@ -59,6 +59,22 @@ function addRow() {
 
   const container = document.querySelector(".container");
   container.appendChild(newRow);
+
+  checkTableData();
 }
 
-window.onload = function () {};
+function checkTableData() {
+  const table = document.querySelector(".container");
+  const noDataMessage = document.querySelector(".noData");
+  if (table.rows.length === 1) {
+    noDataMessage.style.display = "block";
+    table.style.display = "none";
+  } else {
+    noDataMessage.style.display = "none";
+    table.style.display = "table";
+  }
+}
+
+window.onload = function () {
+  checkTableData();
+};

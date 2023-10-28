@@ -73,4 +73,22 @@ function addRow() {
 
   const container = document.querySelector(".container");
   container.appendChild(newRow);
+
+  checkTableData();
 }
+
+function checkTableData() {
+  const table = document.querySelector(".container");
+  const noDataMessage = document.querySelector(".noData");
+  if (table.rows.length === 1) {
+    noDataMessage.style.display = "block";
+    table.style.display = "none";
+  } else {
+    noDataMessage.style.display = "none";
+    table.style.display = "table";
+  }
+}
+
+window.onload = function () {
+  checkTableData();
+};
