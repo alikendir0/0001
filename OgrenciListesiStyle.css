@@ -40,6 +40,7 @@ a:active {
   border-radius: 30px;
   display: flex;
   gap: -5px;
+  cursor: pointer;
 }
 
 .Ad-th {
@@ -113,4 +114,65 @@ tr:last-child {
 .addIcon {
   height: 16px;
   width: 16px;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: 200ms ease-in-out;
+  border: 1px black solid;
+  background-color: white;
+  border-radius: 12px;
+  z-index: 10;
+  width: 500px;
+  max-width: 80%;
+}
+
+.modal.active {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.modal-header {
+  padding: 12px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px black solid;
+}
+
+.modal-header .title {
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.modal-header .close-button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 32px;
+  font-weight: bold;
+  padding-right: 2%;
+}
+
+.modal-body {
+  padding: 12px 8px;
+}
+
+#overlay {
+  position: fixed;
+  transition: 200ms ease-in-out;
+  opacity: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.416);
+  pointer-events: none;
+}
+
+#overlay.active {
+  opacity: 1;
+  pointer-events: all;
 }

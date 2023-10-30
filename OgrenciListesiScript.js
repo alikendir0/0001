@@ -78,3 +78,5 @@ function checkTableData() {
 window.onload = function () {
   checkTableData();
 };
+
+function tcNoCheck() {}

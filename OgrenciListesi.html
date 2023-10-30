@@ -9,7 +9,12 @@
   </head>
   <body>
     <nav>
-      <button type="button" class="addRow" onclick="addRow()">
+      <button
+        data-model-target="#modal"
+        type="button"
+        class="addRow"
+        onclick="addRow()"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -26,6 +31,21 @@
         </svg>
         Öğrenci Ekle
       </button>
+      <div class="modal active" id="modal">
+        <div class="modal-header">
+          <div class="title">Example Modal</div>
+          <button data-close-button type="button" class="close-button">
+            &times;
+          </button>
+        </div>
+        <div class="modal-body">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure tempore
+          libero debitis fuga sed pariatur voluptatem error nam atque voluptate
+          illum, deleniti sapiente ipsum illo omnis, minima distinctio dolorem
+          esse?
+        </div>
+      </div>
+      <div class="active" id="overlay"></div>
     </nav>
     <table class="container">
       <tr>
