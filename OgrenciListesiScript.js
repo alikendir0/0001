@@ -76,7 +76,25 @@ function checkTableData() {
 }
 
 window.onload = function () {
+  modalButtonProperties();
   checkTableData();
 };
 
 function tcNoCheck() {}
+
+function modalButtonProperties() {
+  const openBtn = document.getElementById("open");
+  const closeBtn = document.getElementById("close");
+  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay");
+
+  openBtn.addEventListener("click", () => {
+    modal.classList.add("active");
+    overlay.classList.add("active");
+  });
+
+  closeBtn.addEventListener("click", () => {
+    modal.classList.remove("active");
+    overlay.classList.remove("active");
+  });
+}

@@ -9,12 +9,7 @@
   </head>
   <body>
     <nav>
-      <button
-        data-model-target="#modal"
-        type="button"
-        class="addRow"
-        onclick="addRow()"
-      >
+      <button type="button" id="open" class="addRow">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -31,12 +26,10 @@
         </svg>
         Öğrenci Ekle
       </button>
-      <div class="modal active" id="modal">
+      <div class="modal" id="modal">
         <div class="modal-header">
           <div class="title">Example Modal</div>
-          <button data-close-button type="button" class="close-button">
-            &times;
-          </button>
+          <button type="button" id="close">&times;</button>
         </div>
         <div class="modal-body">
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure tempore
@@ -45,7 +38,7 @@
           esse?
         </div>
       </div>
-      <div class="active" id="overlay"></div>
+      <div id="overlay"></div>
     </nav>
     <table class="container">
       <tr>
