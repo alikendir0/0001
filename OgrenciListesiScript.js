@@ -82,19 +82,24 @@ window.onload = function () {
 
 function tcNoCheck() {}
 
+function modalAppear() {
+  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay");
+  modal.classList.add("active");
+  overlay.classList.add("active");
+}
+
+function modalDisappear() {
+  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay");
+  modal.classList.remove("active");
+  overlay.classList.remove("active");
+}
+
 function modalButtonProperties() {
   const openBtn = document.getElementById("open");
   const closeBtn = document.getElementById("close");
-  const modal = document.getElementById("modal");
-  const overlay = document.getElementById("overlay");
 
-  openBtn.addEventListener("click", () => {
-    modal.classList.add("active");
-    overlay.classList.add("active");
-  });
-
-  closeBtn.addEventListener("click", () => {
-    modal.classList.remove("active");
-    overlay.classList.remove("active");
-  });
+  openBtn.addEventListener("click", modalAppear);
+  closeBtn.addEventListener("click", modalDisappear);
 }
