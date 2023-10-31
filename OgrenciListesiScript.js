@@ -75,31 +75,76 @@ function checkTableData() {
   }
 }
 
-window.onload = function () {
-  modalButtonProperties();
-  checkTableData();
-};
-
-function tcNoCheck() {}
-
-function modalAppear() {
-  const modal = document.getElementById("modal");
-  const overlay = document.getElementById("overlay");
+function modalAppear(modal, overlay) {
   modal.classList.add("active");
   overlay.classList.add("active");
 }
 
-function modalDisappear() {
-  const modal = document.getElementById("modal");
-  const overlay = document.getElementById("overlay");
+function modalDisappear(modal, overlay) {
   modal.classList.remove("active");
   overlay.classList.remove("active");
 }
 
 function modalButtonProperties() {
+  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay");
   const openBtn = document.getElementById("open");
   const closeBtn = document.getElementById("close");
 
-  openBtn.addEventListener("click", modalAppear);
-  closeBtn.addEventListener("click", modalDisappear);
+  openBtn.addEventListener("click", () => modalAppear(modal, overlay));
+  closeBtn.addEventListener("click", () => modalDisappear(modal, overlay));
 }
+
+function submit() {
+  let temp = true;
+  let ad = document.getElementById("ad").value;
+  while (temp) {
+    if (!(ad === null || ad === "")) {
+      temp = false;
+    } else return;
+  }
+
+  let soyad = document.getElementById("soyad").value;
+
+  temp = true;
+  let tcNo = document.getElementById("tcNo").value;
+  while (temp) {
+    if (tcNoCheck(tcNo)) {
+      temp = false;
+    } else return;
+  }
+
+  let ogrenciNo = document.getElementById("ogrenciNo").value;
+
+  const newRow = document.createElement("tr");
+  const adCell = document.createElement("td");
+  const soyadCell = document.createElement("td");
+  const tcNoCell = document.createElement("td");
+  const ogrenciNoCell = document.createElement("td");
+  adCell.textContent = ad;
+  soyadCell.textContent = soyad;
+  tcNoCell.textContent = tcNo;
+  ogrenciNoCell.textContent = ogrenciNo;
+  newRow.appendChild(adCell);
+  newRow.appendChild(soyadCell);
+  newRow.appendChild(tcNoCell);
+  newRow.appendChild(ogrenciNoCell);
+
+  const container = document.querySelector(".container");
+  container.appendChild(newRow);
+
+  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay");
+  modalDisappear(modal, overlay);
+  checkTableData();
+}
+
+function tcNoCheck(tcNo) {
+  if (Math.floor(Math.log10(tcNo)) + 1 == 11) return true;
+  else return false;
+}
+
+window.onload = function () {
+  modalButtonProperties();
+  checkTableData();
+};

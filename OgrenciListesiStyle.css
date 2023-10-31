@@ -128,6 +128,8 @@ tr:last-child {
   z-index: 10;
   width: 500px;
   max-width: 80%;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal.active {
@@ -135,16 +137,7 @@ tr:last-child {
 }
 
 .modal-header {
-  padding: 12px 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px black solid;
-}
-
-.modal-header .title {
-  font-size: 26px;
-  font-weight: bold;
+  padding: 8px 12px;
 }
 
 .modal-header .close-button {
@@ -153,11 +146,14 @@ tr:last-child {
   background: none;
   font-size: 32px;
   font-weight: bold;
-  padding-right: 2%;
+  float: right;
 }
 
 .modal-body {
   padding: 12px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 #overlay {
