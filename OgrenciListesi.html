@@ -31,21 +31,33 @@
           <button class="close-button" type="button" id="close">&times;</button>
         </div>
         <div class="modal-body">
-          <input type="ad" id="ad" placeholder="Ad Girin" />
-          <input type="soyad" id="soyad" placeholder="Soyad Girin" />
-          <input type="tcNo" id="tcNo" placeholder="T.C. Numarasını Girin" />
+          <input type="ad" class="input" id="ad" placeholder="Ad Girin" />
+          <input
+            type="soyad"
+            class="input"
+            id="soyad"
+            placeholder="Soyad Girin"
+          />
+          <input
+            type="tcNo"
+            class="input"
+            id="tcNo"
+            placeholder="T.C. Numarasını Girin"
+          />
           <input
             type="ogrenciNo"
+            class="input"
             id="ogrenciNo"
             placeholder="Ögrenci Numarasını Girin"
           />
+          <div id="hatali" class="hatali">Yanlış Bilgi Girdiniz!</div>
           <button
             class="submit-button"
             type="button"
             id="submit"
             onclick="submit()"
           >
-            Submit
+            Onayla
           </button>
         </div>
       </div>

@@ -9,7 +9,7 @@
   </head>
   <body>
     <nav>
-      <button type="button" class="addRow" onclick="addRow()">
+      <button type="button" id="open" class="addRow">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -24,8 +24,55 @@
             d="M12 4.5v15m7.5-7.5h-15"
           />
         </svg>
-        <p class="ogrenci-ekle">Ders Ekle</p>
+        <p>Ders Ekle</p>
       </button>
+      <div class="modal" id="modal">
+        <div class="modal-header">
+          <button class="close-button" type="button" id="close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input
+            type="ders"
+            class="input"
+            id="ders"
+            placeholder="Dersin Kodunu Girin"
+          />
+          <input
+            type="fakulte"
+            class="input"
+            id="fakulte"
+            placeholder="Fakülteyi Girin"
+          />
+          <input
+            type="zaman"
+            class="input"
+            id="zaman"
+            placeholder="Dersin Gününü ve Saatini Girin"
+          />
+          <input
+            type="sinif"
+            class="input"
+            id="sinif"
+            placeholder="Dersin Gerçekleşeceği Sınıfı Girin"
+          />
+          <input
+            type="ogretici"
+            class="input"
+            id="ogretici"
+            placeholder="İlgili Öğretim Görevlisini Girin"
+          />
+          <div id="hatali" class="hatali">Yanlış Bilgi Girdiniz!</div>
+          <button
+            class="submit-button"
+            type="button"
+            id="submit"
+            onclick="submit()"
+          >
+            Onayla
+          </button>
+        </div>
+      </div>
+      <div id="overlay"></div>
     </nav>
     <table class="container">
       <tr>

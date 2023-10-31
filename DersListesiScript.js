@@ -1,56 +1,114 @@
-function addRow() {
+window.onload = function () {
+  modalButtonProperties();
+  checkTableData();
+};
+
+function checkTableData() {
+  const table = document.querySelector(".container");
+  const noDataMessage = document.querySelector(".noData");
+  if (table.rows.length === 1) {
+    noDataMessage.style.display = "block";
+    table.style.display = "none";
+  } else {
+    noDataMessage.style.display = "none";
+    table.style.display = "table";
+  }
+}
+
+function modalAppear(modal, overlay) {
+  modal.classList.add("active");
+  overlay.classList.add("active");
+}
+
+function modalDisappear(modal, overlay) {
+  modal.classList.remove("active");
+  overlay.classList.remove("active");
+}
+
+function hataliAppear() {
+  const hatali = document.getElementById("hatali");
+  hatali.classList.add("active");
+}
+
+function hataliDisappear() {
+  const hatali = document.getElementById("hatali");
+  hatali.classList.remove("active");
+}
+
+function modalButtonProperties() {
+  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay");
+  const openBtn = document.getElementById("open");
+  const closeBtn = document.getElementById("close");
+
+  openBtn.addEventListener("click", () => modalAppear(modal, overlay));
+  openBtn.addEventListener("click", () => hataliDisappear());
+  openBtn.addEventListener("click", () => clearInputFields());
+  closeBtn.addEventListener("click", () => modalDisappear(modal, overlay));
+  closeBtn.addEventListener("click", () => hataliDisappear());
+}
+
+function clearInputFields() {
+  document.getElementById("ders").value = "";
+  document.getElementById("fakulte").value = "";
+  document.getElementById("zaman").value = "";
+  document.getElementById("sinif").value = "";
+  document.getElementById("ogretici").value = "";
+}
+
+function submit() {
   let temp = true;
-  let ders = prompt("Ders Kodunu Girin:");
+  let ders = document.getElementById("ders").value;
   while (temp) {
     if (!(ders === null || ders === "")) {
       temp = false;
     } else {
-      temp = true;
-      ders = prompt("Ders Kodunu Girin:");
+      hataliAppear();
+      return;
     }
   }
 
-  let fakulte = prompt("Fakülteyi Girin:");
   temp = true;
+  let fakulte = document.getElementById("fakulte").value;
   while (temp) {
     if (!(fakulte === null || fakulte === "")) {
       temp = false;
     } else {
-      temp = true;
-      faculte = prompt("Fakülteyi Girin:");
+      hataliAppear();
+      return;
     }
   }
 
-  let zaman = prompt("Zamanını Girin:");
   temp = true;
+  let zaman = document.getElementById("zaman").value;
   while (temp) {
     if (!(zaman === null || zaman === "")) {
       temp = false;
     } else {
-      temp = true;
-      zaman = prompt("Zamanını Girin:");
+      hataliAppear();
+      return;
     }
   }
 
-  let sinif = prompt("Sınıfı Girin:");
   temp = true;
+  let sinif = document.getElementById("sinif").value;
   while (temp) {
     if (!(sinif === null || sinif === "")) {
       temp = false;
     } else {
-      temp = true;
-      sinif = prompt("Sınıfı Girin:");
+      hataliAppear();
+      return;
     }
   }
 
-  let ogretici = prompt("Öğretim Görevlisi Girin:");
   temp = true;
+  let ogretici = document.getElementById("ogretici").value;
   while (temp) {
     if (!(ogretici === null || ogretici === "")) {
       temp = false;
     } else {
-      temp = true;
-      ogretici = prompt("Öğretim Görevlisi Girin:");
+      hataliAppear();
+      return;
     }
   }
 
@@ -74,21 +132,9 @@ function addRow() {
   const container = document.querySelector(".container");
   container.appendChild(newRow);
 
+  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay");
+  clearInputFields();
+  modalDisappear(modal, overlay);
   checkTableData();
 }
-
-function checkTableData() {
-  const table = document.querySelector(".container");
-  const noDataMessage = document.querySelector(".noData");
-  if (table.rows.length === 1) {
-    noDataMessage.style.display = "block";
-    table.style.display = "none";
-  } else {
-    noDataMessage.style.display = "none";
-    table.style.display = "table";
-  }
-}
-
-window.onload = function () {
-  checkTableData();
-};
