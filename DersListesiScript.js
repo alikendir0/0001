@@ -49,11 +49,11 @@ function modalButtonProperties() {
 }
 
 function clearInputFields() {
-  document.getElementById("ders").value = "";
-  document.getElementById("fakulte").value = "";
-  document.getElementById("zaman").value = "";
-  document.getElementById("sinif").value = "";
-  document.getElementById("ogretici").value = "";
+  const inputs = document.querySelectorAll(".input");
+
+  inputs.forEach((element) => {
+    element.value = "";
+  });
 }
 
 function submit() {

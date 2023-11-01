@@ -49,10 +49,11 @@ function modalButtonProperties() {
 }
 
 function clearInputFields() {
-  document.getElementById("ad").value = "";
-  document.getElementById("soyad").value = "";
-  document.getElementById("tcNo").value = "";
-  document.getElementById("ogrenciNo").value = "";
+  const inputs = document.querySelectorAll(".input");
+
+  inputs.forEach((element) => {
+    element.value = "";
+  });
 }
 
 function submit() {
