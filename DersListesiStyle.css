@@ -217,3 +217,11 @@ tr:last-child {
   border-radius: 30px;
   cursor: pointer;
 }
+
+.submit-button:hover {
+  background-color: #1098ad4e;
+}
+
+.submit-button:active {
+  background-color: #1098ada2;
+}

@@ -43,6 +43,9 @@ a:active {
   cursor: pointer;
 }
 
+.Checkbox-th {
+}
+
 .Ad-th {
   width: 250px;
 }
@@ -56,6 +59,10 @@ a:active {
 }
 .ogrenciNo-th {
   width: 275px;
+}
+
+.Checkbox {
+  margin-left: 26px;
 }
 
 .noData {
@@ -213,4 +220,12 @@ tr:last-child {
   padding: 20px 20px;
   border-radius: 30px;
   cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #1098ad4e;
+}
+
+.submit-button:active {
+  background-color: #1098ada2;
 }

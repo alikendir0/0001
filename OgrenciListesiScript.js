@@ -126,53 +126,55 @@ function submit() {
 }
 
 function tcNoCheck(tcNo) {
-  if (!(tcNo.toString().length == 11)) return false;
+  var temp = String(tcNo).split("").map(Number);
+  console.log(typeof temp[1]);
+  if (!(temp.length == 11)) return false;
 
   let temp10 = 0;
   let temp11 = 0;
   let tcNoStr = String(tcNo);
-  for (let i = 0; i < tcNoStr.length; i++) {
+  for (let i = 0; i < temp.length; i++) {
     switch (i) {
       case 0:
-        if (parseInt(tcNoStr[i]) == 0) {
+        if (temp[i] == 0) {
           hataliAppear();
           return false;
         }
-        temp10 += parseInt(tcNoStr[i]);
+        temp10 += temp[i];
         break;
       case 1:
-        temp11 += parseInt(tcNoStr[i]);
+        temp11 += temp[i];
         break;
       case 2:
-        temp10 += parseInt(tcNoStr[i]);
+        temp10 += temp[i];
         break;
       case 3:
-        temp11 += parseInt(tcNoStr[i]);
+        temp11 += temp[i];
         break;
       case 4:
-        temp10 += parseInt(tcNoStr[i]);
+        temp10 += temp[i];
         break;
       case 5:
-        temp11 += parseInt(tcNoStr[i]);
+        temp11 += temp[i];
         break;
       case 6:
-        temp10 += parseInt(tcNoStr[i]);
+        temp10 += temp[i];
         break;
       case 7:
-        temp11 += parseInt(tcNoStr[i]);
+        temp11 += temp[i];
         break;
       case 8:
-        temp10 += parseInt(tcNoStr[i]);
+        temp10 += temp[i];
         break;
       case 9:
-        if (!((temp10 * 7 - temp11) % 10 == parseInt(tcNoStr[i]))) {
+        if (!((temp10 * 7 - temp11) % 10 == temp[i])) {
           hataliAppear();
           return false;
         }
-        temp11 += parseInt(tcNoStr[i]);
+        temp11 += temp[i];
         break;
       case 10:
-        if (!((temp10 + temp11) % 10 == parseInt(tcNoStr[i]))) {
+        if (!((temp10 + temp11) % 10 == temp[i])) {
           hataliAppear();
           return false;
         }
