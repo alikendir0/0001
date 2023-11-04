@@ -128,11 +128,10 @@ function submit() {
 function tcNoCheck(tcNo) {
   var temp = String(tcNo).split("").map(Number);
   console.log(typeof temp[1]);
-  if (!(temp.length == 11)) return false;
+  if (!/^\d{11}$/.test(tcNo)) return false;
 
   let temp10 = 0;
   let temp11 = 0;
-  let tcNoStr = String(tcNo);
   for (let i = 0; i < temp.length; i++) {
     switch (i) {
       case 0:
