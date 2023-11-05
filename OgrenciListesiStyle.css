@@ -35,15 +35,16 @@ a:active {
   background-color: white;
   color: #495057;
   border: none;
-  margin: 24px 24px;
   padding: 20px 20px;
   border-radius: 30px;
   display: flex;
   gap: -5px;
   cursor: pointer;
+  justify-content: center;
 }
 
 .Checkbox-th {
+  width: 42px;
 }
 
 .Ad-th {
@@ -63,6 +64,8 @@ a:active {
 
 .Checkbox {
   margin-left: 26px;
+  width: 16px;
+  height: 16px;
 }
 
 .noData {
@@ -79,6 +82,7 @@ table {
   background-color: white;
   margin: auto;
   border-radius: 12px;
+  margin-top: 102px;
   margin-bottom: 48px;
   display: none;
 }
@@ -98,13 +102,6 @@ td {
   text-align: center;
 }
 
-tr:first-child {
-  border-top: none;
-}
-tr:last-child {
-  border-bottom: none;
-}
-
 .navigation {
   margin: auto;
   padding: 24px 24px;
@@ -121,6 +118,21 @@ tr:last-child {
 .addIcon {
   height: 16px;
   width: 16px;
+  stroke: #40c057;
+  stroke-width: 4;
+  margin-left: -10px;
+  margin-right: 4px;
+  padding-bottom: 2px;
+}
+
+.deleteIcon {
+  height: 16px;
+  width: 16px;
+  stroke: #f03e3e;
+  stroke-width: 4;
+  margin-left: -10px;
+  margin-right: 4px;
+  padding-bottom: 2px;
 }
 
 .modal {
@@ -228,4 +240,13 @@ tr:last-child {
 
 .submit-button:active {
   background-color: #1098ada2;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: absolute;
+  top: 3%;
+  right: 2%;
 }

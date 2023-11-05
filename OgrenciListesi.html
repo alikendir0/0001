@@ -9,23 +9,47 @@
   </head>
   <body>
     <nav>
-      <button type="button" id="open" class="addRow">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="addIcon"
+      <div class="buttons">
+        <button type="button" id="open" class="addRow">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="addIcon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          Öğrenci Ekle
+        </button>
+        <button
+          type="button"
+          id="delete"
+          class="addRow"
+          onclick="deleteStudent(getCheckedPositions())"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg>
-        Öğrenci Ekle
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="deleteIcon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 12h-15"
+            />
+          </svg>
+          Öğrenci Sil
+        </button>
+      </div>
       <div class="modal" id="modal">
         <div class="modal-header">
           <button class="close-button" type="button" id="close">&times;</button>

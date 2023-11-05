@@ -15,6 +15,46 @@ function checkTableData() {
   }
 }
 
+function submit() {
+  var ad = document.getElementById("ad").value;
+  var soyad = document.getElementById("soyad").value;
+  var tcNo = document.getElementById("tcNo").value;
+  var ogrenciNo = document.getElementById("ogrenciNo").value;
+  const container = document.querySelector(".container");
+  const modal = document.getElementById("modal");
+  const overlay = document.getElementById("overlay");
+
+  if (!credentialsCheck(ad, soyad, tcNo, ogrenciNo)) return;
+  createNewRow(container, ad, soyad, tcNo, ogrenciNo);
+  clearInputFields();
+  modalDisappear(modal, overlay);
+  checkTableData();
+}
+
+function createNewRow(container, ad, soyad, tcNo, ogrenciNo) {
+  const newRow = document.createElement("tr");
+  const checkbox = document.createElement("input");
+  const boxCell = document.createElement("td");
+  const adCell = document.createElement("td");
+  const soyadCell = document.createElement("td");
+  const tcNoCell = document.createElement("td");
+  const ogrenciNoCell = document.createElement("td");
+  checkbox.className = "Checkbox";
+  checkbox.type = "checkbox";
+  adCell.textContent = ad;
+  soyadCell.textContent = soyad;
+  tcNoCell.textContent = tcNo;
+  ogrenciNoCell.textContent = ogrenciNo;
+  newRow.appendChild(boxCell);
+  boxCell.appendChild(checkbox);
+  newRow.appendChild(adCell);
+  newRow.appendChild(soyadCell);
+  newRow.appendChild(tcNoCell);
+  newRow.appendChild(ogrenciNoCell);
+
+  container.appendChild(newRow);
+}
+
 function modalAppear(modal, overlay) {
   modal.classList.add("active");
   overlay.classList.add("active");
@@ -56,78 +96,73 @@ function clearInputFields() {
   });
 }
 
-function submit() {
+function deleteStudent(studentRow) {
+  const container = document.querySelector(".container");
+  for (let i = 0; i < studentRow.length; i++) {
+    if (studentRow[i] >= 1 && studentRow[i] < container.rows.length) {
+      container.deleteRow(studentRow[i]);
+    } else {
+      console.error("Row number is out of range");
+    }
+  }
+}
+
+function getCheckedPositions() {
+  const checkboxes = document.querySelectorAll(".Checkbox");
+  const checkedPositions = [];
+  checkboxes.forEach((checkbox, index) => {
+    if (checkbox.checked) {
+      checkedPositions.push(index + 1);
+    }
+  });
+  return checkedPositions.reverse();
+}
+
+function credentialsCheck(ad, soyad, tcNo, ogrenciNo) {
   let temp = true;
-  let ad = document.getElementById("ad").value;
   while (temp) {
     if (!(ad === null || ad === "")) {
       temp = false;
     } else {
       hataliAppear();
-      return;
+      return false;
     }
   }
 
   temp = true;
-  let soyad = document.getElementById("soyad").value;
   while (temp) {
     if (!(soyad === null || soyad === "")) {
       temp = false;
     } else {
       hataliAppear();
-      return;
+      return false;
     }
   }
 
   temp = true;
-  let tcNo = document.getElementById("tcNo").value;
   while (temp) {
     if (tcNoCheck(tcNo)) {
       temp = false;
     } else {
       hataliAppear();
-      return;
+      return false;
     }
   }
 
   temp = true;
-  let ogrenciNo = document.getElementById("ogrenciNo").value;
   while (temp) {
     if (Math.floor(Math.log10(ogrenciNo)) + 1 == 6) {
       temp = false;
     } else {
       hataliAppear();
-      return;
+      return false;
     }
   }
-
-  const newRow = document.createElement("tr");
-  const adCell = document.createElement("td");
-  const soyadCell = document.createElement("td");
-  const tcNoCell = document.createElement("td");
-  const ogrenciNoCell = document.createElement("td");
-  adCell.textContent = ad;
-  soyadCell.textContent = soyad;
-  tcNoCell.textContent = tcNo;
-  ogrenciNoCell.textContent = ogrenciNo;
-  newRow.appendChild(adCell);
-  newRow.appendChild(soyadCell);
-  newRow.appendChild(tcNoCell);
-  newRow.appendChild(ogrenciNoCell);
-
-  const container = document.querySelector(".container");
-  container.appendChild(newRow);
-
-  const modal = document.getElementById("modal");
-  const overlay = document.getElementById("overlay");
-  clearInputFields();
-  modalDisappear(modal, overlay);
-  checkTableData();
+  return true;
 }
 
 function tcNoCheck(tcNo) {
   var temp = String(tcNo).split("").map(Number);
-  console.log(typeof temp[1]);
   if (!/^\d{11}$/.test(tcNo)) return false;
 
   let temp10 = 0;
