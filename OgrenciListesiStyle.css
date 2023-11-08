@@ -135,6 +135,16 @@ td {
   padding-bottom: 2px;
 }
 
+.saveIcon {
+  height: 16px;
+  width: 16px;
+  stroke: #407ac0;
+  stroke-width: 2;
+  margin-left: -10px;
+  margin-right: 6px;
+  padding-bottom: 2px;
+}
+
 .modal {
   position: fixed;
   top: 50%;

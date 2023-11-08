@@ -1,6 +1,7 @@
 window.onload = function () {
   modalButtonProperties();
   checkTableData();
+  loadTableContents();
 };
 
 function checkTableData() {
@@ -29,6 +30,46 @@ function submit() {
   clearInputFields();
   modalDisappear(modal, overlay);
   checkTableData();
+}
+
+function deleteStudent(studentRow) {
+  studentRow.reverse();
+  const container = document.querySelector(".container");
+  for (let i = 0; i < studentRow.length; i++) {
+    if (studentRow[i] >= 1 && studentRow[i] < container.rows.length) {
+      container.deleteRow(studentRow[i]);
+    }
+  }
+  checkTableData();
+}
+
+function saveTableContents() {
+  const container = document.querySelector(".container");
+  const contents = Array.from(container.rows).map((row) =>
+    Array.from(row.cells).map((cell) => cell.innerHTML)
+  );
+  const contentsJson = JSON.stringify(contents);
+  localStorage.setItem("OgrenciListesitableContents", contentsJson);
+}
+
+function loadTableContents() {
+  const container = document.querySelector(".container");
+  const contentsJson = localStorage.getItem("OgrenciListesitableContents");
+
+  if (contentsJson) {
+    const contents = JSON.parse(contentsJson);
+    contents.forEach((rowContents, rowIndex) => {
+      let row = container.rows[rowIndex];
+      if (!row) row = container.insertRow(rowIndex);
+
+      rowContents.forEach((cellContents, cellIndex) => {
+        let cell = row.cells[cellIndex];
+        if (!cell) cell = row.insertCell(cellIndex);
+
+        cell.innerHTML = cellContents;
+      });
+    });
+  }
 }
 
 function createNewRow(container, ad, soyad, tcNo, ogrenciNo) {
@@ -96,17 +137,6 @@ function clearInputFields() {
   });
 }
 
-function deleteStudent(studentRow) {
-  const container = document.querySelector(".container");
-  for (let i = 0; i < studentRow.length; i++) {
-    if (studentRow[i] >= 1 && studentRow[i] < container.rows.length) {
-      container.deleteRow(studentRow[i]);
-    } else {
-      console.error("Row number is out of range");
-    }
-  }
-}
-
 function getCheckedPositions() {
   const checkboxes = document.querySelectorAll(".Checkbox");
   const checkedPositions = [];
@@ -115,7 +145,7 @@ function getCheckedPositions() {
       checkedPositions.push(index + 1);
     }
   });
-  return checkedPositions.reverse();
+  return checkedPositions;
 }
 
 function credentialsCheck(ad, soyad, tcNo, ogrenciNo) {
