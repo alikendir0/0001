@@ -34,7 +34,6 @@ a:active {
   background-color: white;
   color: #495057;
   border: none;
-  margin: 24px 24px;
   padding: 20px 20px;
   border-radius: 30px;
   display: flex;
@@ -45,6 +44,31 @@ a:active {
 .addIcon {
   height: 16px;
   width: 16px;
+  stroke: #40c057;
+  stroke-width: 4;
+  margin-left: -10px;
+  margin-right: 4px;
+  padding-bottom: 2px;
+}
+
+.deleteIcon {
+  height: 16px;
+  width: 16px;
+  stroke: #f03e3e;
+  stroke-width: 4;
+  margin-left: -10px;
+  margin-right: 4px;
+  padding-bottom: 2px;
+}
+
+.saveIcon {
+  height: 16px;
+  width: 16px;
+  stroke: #407ac0;
+  stroke-width: 2;
+  margin-left: -10px;
+  margin-right: 6px;
+  padding-bottom: 2px;
 }
 
 table {
@@ -94,6 +118,12 @@ tr:last-child {
 }
 .ogretici-th {
   width: 350px;
+}
+
+.Checkbox {
+  margin-left: 26px;
+  width: 16px;
+  height: 16px;
 }
 
 .noData {
@@ -224,4 +254,13 @@ tr:last-child {
 
 .submit-button:active {
   background-color: #1098ada2;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: absolute;
+  top: 3%;
+  right: 2%;
 }

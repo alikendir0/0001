@@ -1,7 +1,8 @@
 window.onload = function () {
   modalButtonProperties();
-  checkTableData();
+  assignmentModalButtonProperties();
   loadTableContents();
+  checkTableData();
 };
 
 function checkTableData() {
@@ -25,7 +26,10 @@ function submit() {
   const modal = document.getElementById("modal");
   const overlay = document.getElementById("overlay");
 
-  if (!credentialsCheck(ad, soyad, tcNo, ogrenciNo)) return;
+  if (!credentialsCheck(ad, soyad, tcNo, ogrenciNo)) {
+    return;
+  }
+
   createNewRow(container, ad, soyad, tcNo, ogrenciNo);
   clearInputFields();
   modalDisappear(modal, overlay);
@@ -49,23 +53,25 @@ function saveTableContents() {
     Array.from(row.cells).map((cell) => cell.innerHTML)
   );
   const contentsJson = JSON.stringify(contents);
-  localStorage.setItem("OgrenciListesitableContents", contentsJson);
+  localStorage.setItem("tableContents", contentsJson);
+  loadTableContents();
 }
 
 function loadTableContents() {
   const container = document.querySelector(".container");
-  const contentsJson = localStorage.getItem("OgrenciListesitableContents");
-
+  const contentsJson = localStorage.getItem("tableContents");
   if (contentsJson) {
     const contents = JSON.parse(contentsJson);
     contents.forEach((rowContents, rowIndex) => {
       let row = container.rows[rowIndex];
-      if (!row) row = container.insertRow(rowIndex);
-
+      if (!row) {
+        row = container.insertRow(rowIndex);
+      }
       rowContents.forEach((cellContents, cellIndex) => {
         let cell = row.cells[cellIndex];
-        if (!cell) cell = row.insertCell(cellIndex);
-
+        if (!cell) {
+          cell = row.insertCell(cellIndex);
+        }
         cell.innerHTML = cellContents;
       });
     });
@@ -121,6 +127,19 @@ function modalButtonProperties() {
   const overlay = document.getElementById("overlay");
   const openBtn = document.getElementById("open");
   const closeBtn = document.getElementById("close");
+
+  openBtn.addEventListener("click", () => modalAppear(modal, overlay));
+  openBtn.addEventListener("click", () => hataliDisappear());
+  openBtn.addEventListener("click", () => clearInputFields());
+  closeBtn.addEventListener("click", () => modalDisappear(modal, overlay));
+  closeBtn.addEventListener("click", () => hataliDisappear());
+}
+
+function assignmentModalButtonProperties() {
+  const modal = document.getElementById("a-modal");
+  const overlay = document.getElementById("a-overlay");
+  const openBtn = document.getElementById("a-open");
+  const closeBtn = document.getElementById("a-close");
 
   openBtn.addEventListener("click", () => modalAppear(modal, overlay));
   openBtn.addEventListener("click", () => hataliDisappear());

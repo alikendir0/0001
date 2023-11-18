@@ -49,9 +49,26 @@
           </svg>
           Öğrenci Sil
         </button>
+        <button type="button" id="a-open" class="assignBtn">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="assignIcon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.042 21.672L13.684 16.6m0 0l-2.51 2.225.569-9.47 5.227 7.917-3.286-.672zM12 2.25V4.5m5.834.166l-1.591 1.591M20.25 10.5H18M7.757 14.743l-1.59 1.59M6 10.5H3.75m4.007-4.243l-1.59-1.59"
+            />
+          </svg>
+          <div class="ders-atama">Ders Atama</div>
+        </button>
         <button
           type="button"
-          id="delete"
+          id="save"
           class="addRow"
           onclick="saveTableContents()"
         >
@@ -69,7 +86,6 @@
               d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12"
             />
           </svg>
-
           Kaydet
         </button>
       </div>
@@ -109,6 +125,23 @@
         </div>
       </div>
       <div id="overlay"></div>
+    </div>
+    <div class="a-modal" id="a-modal">
+      <div class="modal-header">
+        <button class="close-button" type="button" id="a-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="a-hatali" class="hatali">Yanlış Bilgi Girdiniz!</div>
+        <button
+          class="submit-button"
+          type="button"
+          id="submit"
+        >
+          Onayla
+        </button>
+      </div>
+    </div>
+    <div id="a-overlay"></div>
     </nav>
     <table class="container">
       <tr>
@@ -117,41 +150,6 @@
         <th class="Soyad-th">Soyad</th>
         <th class="tcNo-th">T.C. Kimlik Numarası</th>
         <th class="ogrenciNo-th">Ögrenci Numarası</th>
-      </tr>
-      <tr>
-        <td><input class="Checkbox" type="checkbox" /></td>
-        <td class="Ad">Lorem</td>
-        <td class="Soyad">Ipsum</td>
-        <td class="tcNo">34827175619</td>
-        <td class="ogrenciNo">437465</td>
-      </tr>
-      <tr>
-        <td><input class="Checkbox" type="checkbox" /></td>
-        <td class="Ad">Dolor</td>
-        <td class="Soyad">Sit</td>
-        <td class="tcNo">86028364518</td>
-        <td class="ogrenciNo">582934</td>
-      </tr>
-      <tr>
-        <td><input class="Checkbox" type="checkbox" /></td>
-        <td class="Ad">Amet</td>
-        <td class="Soyad">Consectetur</td>
-        <td class="tcNo">12748596011</td>
-        <td class="ogrenciNo">673496</td>
-      </tr>
-      <tr>
-        <td><input class="Checkbox" type="checkbox" /></td>
-        <td class="Ad">Adipisicing</td>
-        <td class="Soyad">Elit</td>
-        <td class="tcNo">29384522831</td>
-        <td class="ogrenciNo">956352</td>
-      </tr>
-      <tr>
-        <td><input class="Checkbox" type="checkbox" /></td>
-        <td class="Ad">Fugiat</td>
-        <td class="Soyad">Voluptas</td>
-        <td class="tcNo">71635542716</td>
-        <td class="ogrenciNo">019683</td>
       </tr>
     </table>
     <div class="noData">Hiçbir Bilgi Yok.</div>

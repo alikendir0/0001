@@ -9,23 +9,70 @@
   </head>
   <body>
     <nav>
-      <button type="button" id="open" class="addRow">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="addIcon"
+      <div class="buttons">
+        <button type="button" id="open" class="addRow">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="addIcon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          <p>Ders Ekle</p>
+        </button>
+        <button
+          type="button"
+          id="delete"
+          class="addRow"
+          onclick="deleteStudent(getCheckedPositions())"
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M12 4.5v15m7.5-7.5h-15"
-          />
-        </svg>
-        <p>Ders Ekle</p>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="deleteIcon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 12h-15"
+            />
+          </svg>
+          Ders Sil
+        </button>
+
+        <button
+          type="button"
+          id="save"
+          class="addRow"
+          onclick="saveTableContents()"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="saveIcon"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12"
+            />
+          </svg>
+          Kaydet
+        </button>
+      </div>
       <div class="modal" id="modal">
         <div class="modal-header">
           <button class="close-button" type="button" id="close">&times;</button>
@@ -76,6 +123,7 @@
     </nav>
     <table class="container">
       <tr>
+        <th class="Checkbox-th"></th>
         <th class="ders-th">Ders Kodu</th>
         <th class="fakulte-th">Fakülte</th>
         <th class="zaman-th">Zaman</th>
@@ -83,6 +131,7 @@
         <th class="ogretici-th">Öğretim Görevlisi</th>
       </tr>
       <tr>
+        <th class="Checkbox-th"><input class="Checkbox" type="checkbox" /></th>
         <td class="ders">SENG-261</td>
         <td class="fakulte">Mühendislik Fakültesi</td>
         <td class="zaman">PZT 11.10-13.00</td>
@@ -90,6 +139,7 @@
         <td class="ogretici">Lorem Ipsum</td>
       </tr>
       <tr>
+        <th class="Checkbox-th"><input class="Checkbox" type="checkbox" /></th>
         <td class="ders">TUR-101</td>
         <td class="fakulte">Sosyal Bilimler Fakültesi</td>
         <td class="zaman">ÇAR 14.10-15.00</td>
@@ -97,6 +147,7 @@
         <td class="ogretici">Dolor Sit</td>
       </tr>
       <tr>
+        <th class="Checkbox-th"><input class="Checkbox" type="checkbox" /></th>
         <td class="ders">CMPE-223</td>
         <td class="fakulte">Mühendislik Fakültesi</td>
         <td class="zaman">PZT 11.10-13.00</td>
@@ -104,6 +155,7 @@
         <td class="ogretici">Amet Consectetur</td>
       </tr>
       <tr>
+        <th class="Checkbox-th"><input class="Checkbox" type="checkbox" /></th>
         <td class="ders">HUM-100</td>
         <td class="fakulte">Sosyal Bilimler Fakültesi</td>
         <td class="zaman">SAL 11.10-13.00</td>
@@ -111,6 +163,7 @@
         <td class="ogretici">Adipisicing Elit</td>
       </tr>
       <tr>
+        <th class="Checkbox-th"><input class="Checkbox" type="checkbox" /></th>
         <td class="ders">HIST-102</td>
         <td class="fakulte">Sosyal Bilimler Fakültesi</td>
         <td class="zaman">CUM 11.10-13.00</td>
