@@ -8,9 +8,11 @@ body {
   font-size: 24px;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-family: sans-serif;
   background-color: #a5d8ff;
-  height: 800px;
+  height: 100%;
 }
 
 a:link {
@@ -32,14 +34,41 @@ a:active {
 
 .addRow {
   float: right;
+  border: none;
   background-color: white;
   color: #495057;
-  border: none;
   padding: 20px 20px;
   border-radius: 30px;
   display: flex;
   cursor: pointer;
   justify-content: center;
+}
+
+#delete {
+  background-color: white;
+}
+
+#delete.disabled {
+  background-color: darkgray;
+  pointer-events: none;
+}
+
+#a-open {
+  background-color: white;
+}
+
+#a-open.disabled {
+  background-color: darkgray;
+  pointer-events: none;
+}
+
+#reset {
+  background-color: white;
+}
+
+#reset.disabled {
+  background-color: darkgray;
+  pointer-events: none;
 }
 
 .assignBtn {
@@ -51,7 +80,7 @@ a:active {
   padding: 20px 20px;
   border-radius: 30px;
   display: flex;
-  gap: -5px;
+
   cursor: pointer;
   justify-content: center;
 }
@@ -90,29 +119,38 @@ a:active {
   padding: 24px 30px;
   display: none;
 }
-table {
+.container {
   border-collapse: collapse;
   background-color: white;
   margin: auto;
   border-radius: 12px;
   margin-top: 102px;
   margin-bottom: 48px;
-  display: none;
 }
-tr {
+.container tr {
   border-top: 1px solid #ced4da;
 }
-th {
+.container th {
   padding-top: 20px;
   padding-bottom: 20px;
   color: #495057;
   text-align: center;
 }
-td {
+.container td {
   padding-top: 12px;
   padding-bottom: 12px;
   color: #495057;
   text-align: center;
+}
+
+.container button {
+  border: none;
+  border-radius: 30px;
+  background-color: #1098ad;
+  color: white;
+  padding: 10px 10px;
+  cursor: pointer;
+  margin-right: 16px;
 }
 
 .navigation {
@@ -160,13 +198,13 @@ td {
   margin-right: 6px;
 }
 
-.saveIcon {
+.resetIcon {
   height: 16px;
   width: 16px;
-  stroke: #407ac0;
+  stroke: #1fd515;
   stroke-width: 2;
   margin-left: -10px;
-  margin-right: 6px;
+  margin-right: 4px;
   padding-bottom: 2px;
 }
 
@@ -249,7 +287,7 @@ td {
   position: relative;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -20%);
   margin-top: 20px;
   border: 1px black solid;
   background-color: rgb(255, 0, 0);
@@ -279,6 +317,24 @@ td {
 
 .modal .submit-button:active {
   background-color: #1098ada2;
+}
+
+.a-container th {
+  font-size: 20px;
+  text-align: center;
+  padding: 0px 6px;
+  background-color: #1098ad;
+}
+
+.a-container td {
+  font-size: 16px;
+  text-align: center;
+  border: 1px solid #000000;
+}
+
+.a-container td .Checkbox {
+  display: block;
+  margin: auto;
 }
 
 .a-modal {
