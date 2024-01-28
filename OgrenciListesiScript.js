@@ -128,7 +128,7 @@ function modalLoadTableContents() {
 }
 
 async function getFile() {
-  const response = await fetch("tableContents.json");
+  const response = await fetch("http://localhost:3001/tableContents");
   const contents = await response.json();
   const contentsJson = JSON.stringify(contents);
   localStorage.setItem("tableContents", contentsJson);
