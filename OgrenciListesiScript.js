@@ -1,5 +1,6 @@
 window.onload = function () {
   createArray();
+  getFile();
   modalButtonProperties();
   assignmentModalButtonProperties();
   loadTableContents();
@@ -124,6 +125,23 @@ function modalLoadTableContents() {
       });
     });
   }
+}
+
+async function getFile() {
+  const response = await fetch("http://localhost:3001/tableContents");
+  let contents = await response.json();
+  contents = contents.map((subArray, index) => {
+    if (index == 0) {
+      subArray.unshift("");
+      subArray.push("");
+      return subArray;
+    }
+    subArray.unshift('<input class="Checkbox" type="checkbox">');
+    subArray.push('<button class="ders-button">Dersler</button>');
+    return subArray;
+  });
+  const contentsJson = JSON.stringify(contents);
+  localStorage.setItem("tableContents", contentsJson);
 }
 
 function createArray() {
