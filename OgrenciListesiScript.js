@@ -1,6 +1,5 @@
 window.onload = function () {
   createArray();
-  getFile();
   modalButtonProperties();
   assignmentModalButtonProperties();
   loadTableContents();
@@ -125,13 +124,6 @@ function modalLoadTableContents() {
       });
     });
   }
-}
-
-async function getFile() {
-  const response = await fetch("tableContents.json");
-  const contents = await response.json();
-  const contentsJson = JSON.stringify(contents);
-  localStorage.setItem("tableContents", contentsJson);
 }
 
 function createArray() {
