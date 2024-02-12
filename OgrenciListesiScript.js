@@ -1,41 +1,50 @@
 window.onload = function () {
-  test();
-  // createArray();
-  // getFile();
+  checkTableData();
   modalButtonProperties();
-  // assignmentModalButtonProperties();
+  assignmentModalButtonProperties();
   loadTableContents();
-  // checkTableData();
   killButtonDetector();
   buttonDetector();
 };
 
-// function checkTableData() {
-//   const table = document.querySelector(".container");
-//   const noDataMessage = document.querySelector(".noData");
-//   const dbutton = document.getElementById("delete");
-//   const abutton = document.getElementById("a-open");
-//   const rbutton = document.getElementById("reset");
-//   if (table.rows.length === 1) {
-//     noDataMessage.style.display = "block";
-//     table.style.display = "none";
-//     dbutton.classList.add("disabled");
-//     dbutton.disable = true;
-//     abutton.classList.add("disabled");
-//     abutton.disable = true;
-//     rbutton.classList.add("disabled");
-//     rbutton.disable = true;
-//   } else {
-//     noDataMessage.style.display = "none";
-//     table.style.display = "table";
-//     dbutton.classList.remove("disabled");
-//     dbutton.disable = false;
-//     abutton.classList.remove("disabled");
-//     abutton.disable = false;
-//     rbutton.classList.remove("disabled");
-//     rbutton.disable = false;
-//   }
-// }
+function noResponse() {
+  const table = document.querySelector(".container");
+  const noResponseMessage = document.querySelector(".noResponse");
+  const overlay = document.getElementById("overlay");
+  const tbutton = document.getElementById("open");
+  const dbutton = document.getElementById("delete");
+  const abutton = document.getElementById("a-open");
+  const rbutton = document.getElementById("reset");
+
+  overlay.classList.add("active");
+  noResponseMessage.classList.add("active");
+  table.style.display = "none";
+  tbutton.classList.add("disabled");
+  dbutton.classList.add("disabled");
+  abutton.classList.add("disabled");
+  rbutton.classList.add("disabled");
+}
+
+function checkTableData() {
+  const table = document.querySelector(".container");
+  const noDataMessage = document.querySelector(".noData");
+  const dbutton = document.getElementById("delete");
+  const abutton = document.getElementById("a-open");
+  const rbutton = document.getElementById("reset");
+  if (table.rows.length === 1) {
+    noDataMessage.style.display = "block";
+    table.style.display = "none";
+    dbutton.classList.add("disabled");
+    abutton.classList.add("disabled");
+    rbutton.classList.add("disabled");
+  } else {
+    noDataMessage.style.display = "none";
+    table.style.display = "table";
+    dbutton.classList.remove("disabled");
+    abutton.classList.remove("disabled");
+    rbutton.classList.remove("disabled");
+  }
+}
 
 function submit() {
   var ad = document.getElementById("ad").value;
@@ -46,58 +55,42 @@ function submit() {
   const modal = document.getElementById("modal");
   const overlay = document.getElementById("overlay");
 
-  // if (!credentialsCheck(ad, soyad, tcNo, ogrenciNo)) {
-  //   return;
-  // }
-
-  // saveTableContents();
-  updateTableContents(ad, soyad, tcNo, ogrenciNo);
-  createNewRow(container, ad, soyad, tcNo, ogrenciNo);
-  clearInputFields();
-  modalDisappear(modal, overlay);
-  // checkTableData();
+  updateTableContents(ad, soyad, tcNo, ogrenciNo).then((result) => {
+    if (!result) {
+      return;
+    }
+    createNewRow(container, ad, soyad, tcNo, ogrenciNo);
+    clearInputFields();
+    modalDisappear(modal, overlay);
+    checkTableData();
+  });
 }
 
-// function deleteStudent(studentRow) {
-//   const contents = JSON.parse(localStorage.getItem("assignments"));
-//   studentRow.reverse();
-//   const container = document.querySelector(".container");
-//   for (let i = 0; i < studentRow.length; i++) {
-//     if (studentRow[i] >= 1 && studentRow[i] < container.rows.length) {
-//       container.deleteRow(studentRow[i]);
-//       contents.splice(studentRow[i] - 1, 1);
-//     }
-//   }
-
-//   const json = JSON.stringify(contents);
-//   localStorage.setItem("assignments", json);
-//   saveTableContents();
-//   checkTableData();
-//   killButtonDetector();
-//   buttonDetector();
-// }
-
-// function saveTableContents() {
-//   const container = document.querySelector(".container");
-//   const contents = Array.from(container.rows).map((row) =>
-//     Array.from(row.cells).map((cell) => cell.innerHTML)
-//   );
-//   const contentsJson = JSON.stringify(contents);
-//   localStorage.setItem("tableContents", contentsJson);
-//   loadTableContents();
-// }
-
-function test() {
-  // fetch("http://localhost:3000/tableContents")
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     var test = data.data[1];
-  //     console.log("Size:", test.soyad);
-  //   });
+async function deleteStudent(studentRow) {
+  studentRow.reverse();
+  const container = document.querySelector(".container");
+  for (let i = 0; i < studentRow.length; i++) {
+    fetch(
+      `http://localhost:3000/studentTableContents/data/${studentRow[i] - 1}`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Message:", data.message);
+        checkTableData();
+      });
+  }
+  for (let i = 0; i < studentRow.length; i++) {
+    container.deleteRow(studentRow[i]);
+  }
+  killButtonDetector();
+  buttonDetector();
 }
 
 function updateTableContents(ad, soyad, tcNo, ogrenciNo) {
-  fetch("http://localhost:3000/tableContents", {
+  return fetch("http://localhost:3000/studentTableContents", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -107,25 +100,54 @@ function updateTableContents(ad, soyad, tcNo, ogrenciNo) {
       soyad: soyad,
       tcNo: tcNo,
       ogrenciNo: ogrenciNo,
+      dersler: [],
     }),
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      var element = document.querySelector(".hatali");
+      switch (data.code) {
+        case 1:
+          element.innerText = "Adınızı Yanlış Girdiniz!";
+          hataliAppear();
+          return false;
+        case 2:
+          element.innerText = "Soyadınızı Yanlış Girdiniz!";
+          hataliAppear();
+          return false;
+        case 3:
+          element.innerText = "T.C. Numaranızı Yanlış Girdiniz!";
+          hataliAppear();
+          return false;
+        case 4:
+          element.innerText = "Öğrenci Numaranızı Yanlış Girdiniz!";
+          hataliAppear();
+          return false;
+        default:
+          console.log(data.message);
+          return true;
+      }
     })
-    .catch((error) => console.error("Error:", error));
+    .catch((error) => {
+      console.error("Error:", error);
+      checkTableData();
+      return false;
+    });
 }
 
 function loadTableContents() {
   var size;
   var ogrenci;
-  fetch("http://localhost:3000/tableContents")
+  const container = document.querySelector(".container");
+  while (container.rows.length > 1) {
+    container.deleteRow(container.rows.length - 1);
+  }
+  fetch("http://localhost:3000/studentTableContents")
     .then((response) => response.json())
     .then((data) => {
       size = data.size;
-      if (size >= 0) {
+      if (size > 0) {
         for (let i = 0; i < size; i++) {
-          console.log(i);
           ogrenci = data.data[i];
           createNewRow(
             container,
@@ -135,87 +157,107 @@ function loadTableContents() {
             ogrenci.ogrenciNo
           );
         }
-      }
+        checkTableData();
+      } else checkTableData();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      noResponse();
     });
-  const container = document.querySelector(".container");
-
-  // const contentsJson = localStorage.getItem("tableContents");
-  // const contents = JSON.parse(contentsJson);
-  // contents.forEach((rowContents, rowIndex) => {
-  //   let row = container.rows[rowIndex];
-  //   if (!row) {
-  //     row = container.insertRow(rowIndex);
-  //   }
-  //   rowContents.forEach((cellContents, cellIndex) => {
-  //     let cell = row.cells[cellIndex];
-  //     if (!cell) {
-  //       cell = row.insertCell(cellIndex);
-  //     }
-  //     cell.innerHTML = cellContents;
-  //   });
-  // });
 }
 
-// function modalLoadTableContents() {
-//   const container = document.querySelector(".a-container");
-//   const contentsJson = localStorage.getItem("classtableContents");
-//   if (contentsJson) {
-//     const contents = JSON.parse(contentsJson);
-//     contents.forEach((rowContents, rowIndex) => {
-//       let row = container.rows[rowIndex];
-//       if (!row) {
-//         row = container.insertRow(rowIndex);
-//       }
-//       rowContents.forEach((cellContents, cellIndex) => {
-//         let cell = row.cells[cellIndex];
-//         if (!cell) {
-//           cell = row.insertCell(cellIndex);
-//         }
-//         cell.innerHTML = cellContents;
-//       });
-//     });
-//   }
-// }
+function modalLoadTableContents() {
+  const container = document.querySelector(".a-container");
+  while (container.rows.length > 1) {
+    container.deleteRow(container.rows.length - 1);
+  }
+  fetch("http://localhost:3000/classTableContents")
+    .then((response) => response.json())
+    .then((data) => {
+      size = data.size;
+      if (size > 0) {
+        for (let i = 0; i < size; i++) {
+          ders = data.data[i];
+          modalCreateNewRow(
+            container,
+            ders.kod,
+            ders.fakulte,
+            ders.zaman,
+            ders.sinif,
+            ders.ogretici
+          );
+        }
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 
-// function createArray() {
-//   let assignments = JSON.parse(localStorage.getItem("assignments"));
-//   if (!assignments) {
-//     assignments = [];
-//     localStorage.setItem("assignments", JSON.stringify(assignments));
-//   }
-// }
+function modalSubmit() {
+  const modal = document.getElementById("a-modal");
+  const overlay = document.getElementById("a-overlay");
+  const table = document.querySelector(".container");
+  const atable = document.querySelector(".a-container");
 
-// function modalSubmit() {
-//   const modal = document.getElementById("a-modal");
-//   const overlay = document.getElementById("a-overlay");
-//   const table = document.querySelector(".container");
-//   const atable = document.querySelector(".a-container");
-//   let assignments = JSON.parse(localStorage.getItem("assignments"));
+  for (let i = 1; i < table.rows.length; i++) {
+    const row = table.rows[i];
+    const checkbox = row.querySelector('input[type="checkbox"]');
+    if (checkbox.checked) {
+      const classes = getClassCheckedPositions();
+      for (let j = 0; j < classes.length; j++) {
+        const arow = atable.rows[classes[j]];
+        const kod = arow.cells[1].innerText;
 
-//   for (let i = 1; i < table.rows.length; i++) {
-//     assignments.push([]);
-//     const row = table.rows[i];
-//     const checkbox = row.querySelector('input[type="checkbox"]');
-//     if (checkbox.checked) {
-//       const classes = getClassCheckedPositions();
-//       for (let j = 0; j < classes.length; j++) {
-//         const arow = atable.rows[classes[j]];
-//         const classToAdd = arow.cells[1].innerText;
-//         if (!assignments[i - 1].includes(classToAdd)) {
-//           assignments[i - 1].push(classToAdd);
-//         }
-//       }
-//     }
-//   }
+        fetch(`http://localhost:3000/studentTableContents/${i - 1}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            kod: kod,
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          });
+      }
+    }
+  }
 
-//   const json = JSON.stringify(assignments);
-//   localStorage.setItem("assignments", json);
-//   saveTableContents();
-//   clearCheckBoxes();
-//   modalDisappear(modal, overlay);
-//   killButtonDetector();
-//   buttonDetector();
-// }
+  clearCheckBoxes();
+  modalDisappear(modal, overlay);
+  killButtonDetector();
+  buttonDetector();
+}
+
+function modalCreateNewRow(container, kod, fakulte, zaman, sinif, ogretici) {
+  const newRow = document.createElement("tr");
+  const checkbox = document.createElement("input");
+  const boxCell = document.createElement("td");
+  const kodCell = document.createElement("td");
+  const fakulteCell = document.createElement("td");
+  const zamanCell = document.createElement("td");
+  const sinifCell = document.createElement("td");
+  const ogreticiCell = document.createElement("td");
+  checkbox.className = "Checkbox";
+  checkbox.type = "checkbox";
+  kodCell.textContent = kod;
+  fakulteCell.textContent = fakulte;
+  zamanCell.textContent = zaman;
+  sinifCell.textContent = sinif;
+  ogreticiCell.textContent = ogretici;
+  newRow.appendChild(boxCell);
+  boxCell.appendChild(checkbox);
+  newRow.appendChild(kodCell);
+  newRow.appendChild(fakulteCell);
+  newRow.appendChild(zamanCell);
+  newRow.appendChild(sinifCell);
+  newRow.appendChild(ogreticiCell);
+
+  container.appendChild(newRow);
+}
 
 function createNewRow(container, ad, soyad, tcNo, ogrenciNo) {
   const newRow = document.createElement("tr");
@@ -247,7 +289,6 @@ function createNewRow(container, ad, soyad, tcNo, ogrenciNo) {
   buttonCell.appendChild(button);
 
   container.appendChild(newRow);
-  // saveTableContents();
   killButtonDetector();
   buttonDetector();
 }
@@ -285,19 +326,19 @@ function modalButtonProperties() {
   closeBtn.addEventListener("click", () => hataliDisappear());
 }
 
-// function assignmentModalButtonProperties() {
-//   const modal = document.getElementById("a-modal");
-//   const overlay = document.getElementById("a-overlay");
-//   const openBtn = document.getElementById("a-open");
-//   const closeBtn = document.getElementById("a-close");
+function assignmentModalButtonProperties() {
+  const modal = document.getElementById("a-modal");
+  const overlay = document.getElementById("a-overlay");
+  const openBtn = document.getElementById("a-open");
+  const closeBtn = document.getElementById("a-close");
 
-//   openBtn.addEventListener("click", () => modalAppear(modal, overlay));
-//   openBtn.addEventListener("click", () => hataliDisappear());
-//   openBtn.addEventListener("click", () => clearInputFields());
-//   openBtn.addEventListener("click", () => modalLoadTableContents());
-//   closeBtn.addEventListener("click", () => modalDisappear(modal, overlay));
-//   closeBtn.addEventListener("click", () => hataliDisappear());
-// }
+  openBtn.addEventListener("click", () => modalAppear(modal, overlay));
+  openBtn.addEventListener("click", () => hataliDisappear());
+  openBtn.addEventListener("click", () => clearInputFields());
+  openBtn.addEventListener("click", () => modalLoadTableContents());
+  closeBtn.addEventListener("click", () => modalDisappear(modal, overlay));
+  closeBtn.addEventListener("click", () => hataliDisappear());
+}
 
 function clearCheckBoxes() {
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -314,12 +355,16 @@ function clearInputFields() {
   });
 }
 
-// function resetClasses() {
-//   let assignments = JSON.parse(localStorage.getItem("assignments"));
-//   assignments = [];
-//   const json = JSON.stringify(assignments);
-//   localStorage.setItem("assignments", json);
-// }
+function resetClasses() {
+  fetch("http://localhost:3000/studentTableContents/data", {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Message:", data.message);
+      checkTableData();
+    });
+}
 
 function killButtonDetector() {
   const buttons = document.querySelectorAll(".ders-button");
@@ -330,12 +375,17 @@ function killButtonDetector() {
   });
 }
 
-// function classes(index) {
-//   const contents = JSON.parse(localStorage.getItem("assignments"));
-//   if (contents && contents[index] && contents[index].length > 0) {
-//     alert(contents[index]);
-//   } else alert("Hiçbir Ders Atanmadı");
-// }
+function classes(index) {
+  fetch(`http://localhost:3000/studentTableContents/${index}`)
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.length !== 0) alert(data.dersler);
+      else alert("Hiçbir ders atanmadı!");
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
 
 function buttonDetector() {
   document.querySelectorAll(".ders-button").forEach((button, index) => {
@@ -345,129 +395,24 @@ function buttonDetector() {
   });
 }
 
-// function getStudentCheckedPositions() {
-//   const checkboxes = document.querySelectorAll(".container .Checkbox");
-//   const checkedPositions = [];
-//   checkboxes.forEach((checkbox, index) => {
-//     if (checkbox.checked) {
-//       checkedPositions.push(index + 1);
-//     }
-//   });
-//   return checkedPositions;
-// }
+function getStudentCheckedPositions() {
+  const checkboxes = document.querySelectorAll(".container .Checkbox");
+  const checkedPositions = [];
+  checkboxes.forEach((checkbox, index) => {
+    if (checkbox.checked) {
+      checkedPositions.push(index + 1);
+    }
+  });
+  return checkedPositions;
+}
 
-// function getClassCheckedPositions() {
-//   const checkboxes = document.querySelectorAll(".a-container .Checkbox");
-//   const checkedPositions = [];
-//   checkboxes.forEach((checkbox, index) => {
-//     if (checkbox.checked) {
-//       checkedPositions.push(index + 1);
-//     }
-//   });
-//   return checkedPositions;
-// }
-
-// function credentialsCheck(ad, soyad, tcNo, ogrenciNo) {
-//   var element = document.querySelector(".hatali");
-//   let temp = true;
-//   while (temp) {
-//     if (!(ad === null || ad === "")) {
-//       temp = false;
-//     } else {
-//       element.innerText = "Adınızı Yanlış Girdiniz!";
-//       hataliAppear();
-//       return false;
-//     }
-//   }
-
-//   temp = true;
-//   while (temp) {
-//     if (!(soyad === null || soyad === "")) {
-//       temp = false;
-//     } else {
-//       element.innerText = "Soyadınızı Yanlış Girdiniz!";
-//       hataliAppear();
-//       return false;
-//     }
-//   }
-
-//   temp = true;
-//   while (temp) {
-//     if (tcNoCheck(tcNo)) {
-//       temp = false;
-//     } else {
-//       element.innerText = "T.C. Numaranızı Yanlış Girdiniz!";
-//       hataliAppear();
-//       return false;
-//     }
-//   }
-
-//   temp = true;
-//   while (temp) {
-//     if (ogrenciNo.length === 6) {
-//       temp = false;
-//     } else {
-//       element.innerText = "Öğrenci Numaranızı Yanlış Girdiniz!";
-//       hataliAppear();
-//       return false;
-//     }
-//   }
-//   return true;
-// }
-
-// function tcNoCheck(tcNo) {
-//   var temp = String(tcNo).split("").map(Number);
-//   if (!/^\d{11}$/.test(tcNo)) return false;
-
-//   let temp10 = 0;
-//   let temp11 = 0;
-//   for (let i = 0; i < temp.length; i++) {
-//     switch (i) {
-//       case 0:
-//         if (temp[i] == 0) {
-//           hataliAppear();
-//           return false;
-//         }
-//         temp10 += temp[i];
-//         break;
-//       case 1:
-//         temp11 += temp[i];
-//         break;
-//       case 2:
-//         temp10 += temp[i];
-//         break;
-//       case 3:
-//         temp11 += temp[i];
-//         break;
-//       case 4:
-//         temp10 += temp[i];
-//         break;
-//       case 5:
-//         temp11 += temp[i];
-//         break;
-//       case 6:
-//         temp10 += temp[i];
-//         break;
-//       case 7:
-//         temp11 += temp[i];
-//         break;
-//       case 8:
-//         temp10 += temp[i];
-//         break;
-//       case 9:
-//         if (!((temp10 * 7 - temp11) % 10 == temp[i])) {
-//           hataliAppear();
-//           return false;
-//         }
-//         temp11 += temp[i];
-//         break;
-//       case 10:
-//         if (!((temp10 + temp11) % 10 == temp[i])) {
-//           hataliAppear();
-//           return false;
-//         }
-//         break;
-//     }
-//   }
-//   return true;
-// }
+function getClassCheckedPositions() {
+  const checkboxes = document.querySelectorAll(".a-container .Checkbox");
+  const checkedPositions = [];
+  checkboxes.forEach((checkbox, index) => {
+    if (checkbox.checked) {
+      checkedPositions.push(index + 1);
+    }
+  });
+  return checkedPositions;
+}

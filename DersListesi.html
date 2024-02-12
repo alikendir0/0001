@@ -50,7 +50,7 @@
           Ders Sil
         </button>
 
-        <button
+        <!-- <button
           type="button"
           id="save"
           class="addRow"
@@ -71,7 +71,7 @@
             />
           </svg>
           Kaydet
-        </button>
+        </button> -->
       </div>
       <div class="modal" id="modal">
         <div class="modal-header">
@@ -79,9 +79,9 @@
         </div>
         <div class="modal-body">
           <input
-            type="ders"
+            type="kod"
             class="input"
-            id="ders"
+            id="kod"
             placeholder="Dersin Kodunu Girin"
           />
           <input
@@ -124,7 +124,7 @@
     <table class="container">
       <tr>
         <th class="Checkbox-th"></th>
-        <th class="ders-th">Ders Kodu</th>
+        <th class="kod-th">Ders Kodu</th>
         <th class="fakulte-th">Fakülte</th>
         <th class="zaman-th">Zaman</th>
         <th class="sinif-th">Sınıf</th>
@@ -132,6 +132,9 @@
       </tr>
     </table>
     <div class="noData">Hiçbir Bilgi Yok.</div>
+    <div class="noResponse">
+      <div class="noResponseMsg">Bağlantı Sağlanamadı!</div>
+    </div>
   </body>
   <nav class="navigation">
     <div class="page">

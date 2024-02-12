@@ -4,6 +4,16 @@ window.onload = function () {
   checkTableData();
 };
 
+function noResponse() {
+  const table = document.querySelector(".container");
+  const noResponseMessage = document.querySelector(".noResponse");
+  const overlay = document.getElementById("overlay");
+
+  overlay.classList.add("active");
+  noResponseMessage.classList.add("active");
+  table.style.display = "none";
+}
+
 function checkTableData() {
   const table = document.querySelector(".container");
   const noDataMessage = document.querySelector(".noData");
@@ -57,50 +67,87 @@ function clearInputFields() {
   });
 }
 
-function deleteClass(classRow) {
+async function deleteClass(classRow) {
   classRow.reverse();
   const container = document.querySelector(".container");
   for (let i = 0; i < classRow.length; i++) {
-    if (classRow[i] >= 1 && classRow[i] < container.rows.length) {
-      container.deleteRow(classRow[i]);
-    }
+    fetch(`http://localhost:3000/classTableContents/data/${classRow[i] - 1}`, {
+      method: "DELETE",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Message:", data.message);
+        checkTableData();
+      });
   }
-  checkTableData();
+  for (let i = 0; i < classRow.length; i++) {
+    container.deleteRow(classRow[i]);
+  }
 }
 
-function saveTableContents() {
-  const container = document.querySelector(".container");
-  const contents = Array.from(container.rows).map((row) =>
-    Array.from(row.cells).map((cell) => cell.innerHTML)
-  );
-  const contentsJson = JSON.stringify(contents);
-  localStorage.setItem("classtableContents", contentsJson);
-  loadTableContents();
+function updateTableContents(kod, fakulte, zaman, sinif, ogretici) {
+  return fetch("http://localhost:3000/classTableContents", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      kod: kod,
+      fakulte: fakulte,
+      zaman: zaman,
+      sinif: sinif,
+      ogretici: ogretici,
+    }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+      if (data.code == 0) {
+        hataliAppear();
+        return false;
+      } else {
+        console.log(data.message);
+        return true;
+      }
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      checkTableData();
+      return false;
+    });
 }
 
 function loadTableContents() {
+  var size;
+  var ders;
   const container = document.querySelector(".container");
-  const contentsJson = localStorage.getItem("classtableContents");
-  if (contentsJson) {
-    const contents = JSON.parse(contentsJson);
-    contents.forEach((rowContents, rowIndex) => {
-      let row = container.rows[rowIndex];
-      if (!row) {
-        row = container.insertRow(rowIndex);
-      }
-      rowContents.forEach((cellContents, cellIndex) => {
-        let cell = row.cells[cellIndex];
-        if (!cell) {
-          cell = row.insertCell(cellIndex);
+  fetch("http://localhost:3000/classTableContents")
+    .then((response) => response.json())
+    .then((data) => {
+      size = data.size;
+      if (size > 0) {
+        for (let i = 0; i < size; i++) {
+          ders = data.data[i];
+          createNewRow(
+            container,
+            ders.kod,
+            ders.fakulte,
+            ders.zaman,
+            ders.sinif,
+            ders.ogretici
+          );
         }
-        cell.innerHTML = cellContents;
-      });
+        checkTableData();
+      } else checkTableData();
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+      noResponse();
     });
-  }
 }
 
 function submit() {
-  let ders = document.getElementById("ders").value;
+  let kod = document.getElementById("kod").value;
   let fakulte = document.getElementById("fakulte").value;
   let zaman = document.getElementById("zaman").value;
   let sinif = document.getElementById("sinif").value;
@@ -109,35 +156,36 @@ function submit() {
   const overlay = document.getElementById("overlay");
   const container = document.querySelector(".container");
 
-  if (!credentialsCheck(ders, fakulte, zaman, sinif, ogretici)) {
-    return;
-  }
-
-  createNewRow(container, ders, fakulte, zaman, sinif, ogretici);
-  clearInputFields();
-  modalDisappear(modal, overlay);
-  checkTableData();
+  updateTableContents(kod, fakulte, zaman, sinif, ogretici).then((result) => {
+    if (!result) {
+      return;
+    }
+    createNewRow(container, kod, fakulte, zaman, sinif, ogretici);
+    clearInputFields();
+    modalDisappear(modal, overlay);
+    checkTableData();
+  });
 }
 
-function createNewRow(container, ders, fakulte, zaman, sinif, ogretici) {
+function createNewRow(container, kod, fakulte, zaman, sinif, ogretici) {
   const newRow = document.createElement("tr");
   const checkbox = document.createElement("input");
   const boxCell = document.createElement("td");
-  const dersCell = document.createElement("td");
+  const kodCell = document.createElement("td");
   const fakulteCell = document.createElement("td");
   const zamanCell = document.createElement("td");
   const sinifCell = document.createElement("td");
   const ogreticiCell = document.createElement("td");
   checkbox.className = "Checkbox";
   checkbox.type = "checkbox";
-  dersCell.textContent = ders;
+  kodCell.textContent = kod;
   fakulteCell.textContent = fakulte;
   zamanCell.textContent = zaman;
   sinifCell.textContent = sinif;
   ogreticiCell.textContent = ogretici;
   newRow.appendChild(boxCell);
   boxCell.appendChild(checkbox);
-  newRow.appendChild(dersCell);
+  newRow.appendChild(kodCell);
   newRow.appendChild(fakulteCell);
   newRow.appendChild(zamanCell);
   newRow.appendChild(sinifCell);
@@ -155,62 +203,4 @@ function getCheckedPositions() {
     }
   });
   return checkedPositions;
-}
-
-function credentialsCheck(ders, fakulte, zaman, sinif, ogretici) {
-  let temp = true;
-
-  while (temp) {
-    if (!(ders === null || ders === "")) {
-      temp = false;
-    } else {
-      hataliAppear();
-      return false;
-    }
-  }
-
-  temp = true;
-
-  while (temp) {
-    if (!(fakulte === null || fakulte === "")) {
-      temp = false;
-    } else {
-      hataliAppear();
-      return false;
-    }
-  }
-
-  temp = true;
-
-  while (temp) {
-    if (!(zaman === null || zaman === "")) {
-      temp = false;
-    } else {
-      hataliAppear();
-      return false;
-    }
-  }
-
-  temp = true;
-
-  while (temp) {
-    if (!(sinif === null || sinif === "")) {
-      temp = false;
-    } else {
-      hataliAppear();
-      return false;
-    }
-  }
-
-  temp = true;
-
-  while (temp) {
-    if (!(ogretici === null || ogretici === "")) {
-      temp = false;
-    } else {
-      hataliAppear();
-      return false;
-    }
-  }
-  return true;
 }
