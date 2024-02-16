@@ -102,7 +102,7 @@ function updateTableContents(kod, fakulte, zaman, sinif, ogretici) {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      if (data.code == 0) {
+      if (data.code == 1) {
         hataliAppear();
         return false;
       } else {

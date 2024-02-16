@@ -25,18 +25,34 @@ function noResponse() {
   rbutton.classList.add("disabled");
 }
 
-function checkTableData() {
+async function checkTableData() {
+  var classSize;
+  try {
+    const response = await fetch("http://localhost:3000/classTableContents");
+    const data = await response.json();
+    classSize = data.size;
+  } catch (err) {
+    console.log(err);
+  }
+
   const table = document.querySelector(".container");
   const noDataMessage = document.querySelector(".noData");
   const dbutton = document.getElementById("delete");
   const abutton = document.getElementById("a-open");
   const rbutton = document.getElementById("reset");
+
   if (table.rows.length === 1) {
     noDataMessage.style.display = "block";
     table.style.display = "none";
     dbutton.classList.add("disabled");
     abutton.classList.add("disabled");
     rbutton.classList.add("disabled");
+  } else if (classSize === 0) {
+    noDataMessage.style.display = "none";
+    table.style.display = "table";
+    dbutton.classList.remove("disabled");
+    abutton.classList.add("disabled");
+    rbutton.classList.remove("disabled");
   } else {
     noDataMessage.style.display = "none";
     table.style.display = "table";
@@ -168,6 +184,7 @@ function loadTableContents() {
 
 function modalLoadTableContents() {
   const container = document.querySelector(".a-container");
+  console.log(container.rows.length);
   while (container.rows.length > 1) {
     container.deleteRow(container.rows.length - 1);
   }
