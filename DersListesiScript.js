@@ -71,7 +71,7 @@ async function deleteClass(classRow) {
   classRow.reverse();
   const container = document.querySelector(".container");
   for (let i = 0; i < classRow.length; i++) {
-    fetch(`http://localhost:3000/classTableContents/data/${classRow[i] - 1}`, {
+    fetch(`http://localhost:3000/classes/delete/${classRow[i] - 1}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -86,7 +86,7 @@ async function deleteClass(classRow) {
 }
 
 function updateTableContents(kod, fakulte, zaman, sinif, ogretici) {
-  return fetch("http://localhost:3000/classTableContents", {
+  return fetch("http://localhost:3000/classes/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -102,7 +102,7 @@ function updateTableContents(kod, fakulte, zaman, sinif, ogretici) {
     .then((response) => response.json())
     .then((data) => {
       console.log(data);
-      if (data.code == 1) {
+      if (!data.code == 0) {
         hataliAppear();
         return false;
       } else {
@@ -121,7 +121,7 @@ function loadTableContents() {
   var size;
   var ders;
   const container = document.querySelector(".container");
-  fetch("http://localhost:3000/classTableContents")
+  fetch("http://localhost:3000/classes/get")
     .then((response) => response.json())
     .then((data) => {
       size = data.size;

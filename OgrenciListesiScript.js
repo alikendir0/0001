@@ -28,7 +28,7 @@ function noResponse() {
 async function checkTableData() {
   var classSize;
   try {
-    const response = await fetch("http://localhost:3000/classTableContents");
+    const response = await fetch("http://localhost:3000/classes/get");
     const data = await response.json();
     classSize = data.size;
   } catch (err) {
@@ -86,12 +86,9 @@ async function deleteStudent(studentRow) {
   studentRow.reverse();
   const container = document.querySelector(".container");
   for (let i = 0; i < studentRow.length; i++) {
-    fetch(
-      `http://localhost:3000/studentTableContents/data/${studentRow[i] - 1}`,
-      {
-        method: "DELETE",
-      }
-    )
+    fetch(`http://localhost:3000/students/delete/${studentRow[i] - 1}`, {
+      method: "DELETE",
+    })
       .then((response) => response.json())
       .then((data) => {
         console.log("Message:", data.message);
@@ -106,7 +103,7 @@ async function deleteStudent(studentRow) {
 }
 
 function updateTableContents(ad, soyad, tcNo, ogrenciNo) {
-  return fetch("http://localhost:3000/studentTableContents", {
+  return fetch("http://localhost:3000/students/add", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -158,7 +155,7 @@ function loadTableContents() {
   while (container.rows.length > 1) {
     container.deleteRow(container.rows.length - 1);
   }
-  fetch("http://localhost:3000/studentTableContents")
+  fetch("http://localhost:3000/students/get")
     .then((response) => response.json())
     .then((data) => {
       size = data.size;
@@ -184,11 +181,10 @@ function loadTableContents() {
 
 function modalLoadTableContents() {
   const container = document.querySelector(".a-container");
-  console.log(container.rows.length);
   while (container.rows.length > 1) {
     container.deleteRow(container.rows.length - 1);
   }
-  fetch("http://localhost:3000/classTableContents")
+  fetch("http://localhost:3000/classes/get")
     .then((response) => response.json())
     .then((data) => {
       size = data.size;
@@ -226,7 +222,7 @@ function modalSubmit() {
         const arow = atable.rows[classes[j]];
         const kod = arow.cells[1].innerText;
 
-        fetch(`http://localhost:3000/studentTableContents/${i - 1}`, {
+        fetch(`http://localhost:3000/students/assign/${i - 1}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -373,12 +369,18 @@ function clearInputFields() {
 }
 
 function resetClasses() {
-  fetch("http://localhost:3000/studentTableContents/data", {
+  fetch(`http://localhost:3000/students/deassign`, {
     method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      indexes: getStudentCheckedPositions(),
+    }),
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log("Message:", data.message);
+      clearCheckBoxes();
       checkTableData();
     });
 }
@@ -393,7 +395,7 @@ function killButtonDetector() {
 }
 
 function classes(index) {
-  fetch(`http://localhost:3000/studentTableContents/${index}`)
+  fetch(`http://localhost:3000/students/getclasses/${index}`)
     .then((response) => response.json())
     .then((data) => {
       if (data.length !== 0) alert(data.dersler);
