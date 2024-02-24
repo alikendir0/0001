@@ -30,7 +30,7 @@ async function checkTableData() {
   try {
     const response = await fetch("http://localhost:3000/classes/get");
     const data = await response.json();
-    classSize = data.size;
+    classSize = data.d.size;
   } catch (err) {
     console.log(err);
   }
@@ -91,7 +91,6 @@ async function deleteStudent(studentRow) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Message:", data.message);
         checkTableData();
       });
   }
@@ -137,7 +136,6 @@ function updateTableContents(ad, soyad, tcNo, ogrenciNo) {
           hataliAppear();
           return false;
         default:
-          console.log(data.message);
           return true;
       }
     })
@@ -158,10 +156,10 @@ function loadTableContents() {
   fetch("http://localhost:3000/students/get")
     .then((response) => response.json())
     .then((data) => {
-      size = data.size;
+      size = data.d.size;
       if (size > 0) {
         for (let i = 0; i < size; i++) {
-          ogrenci = data.data[i];
+          ogrenci = data.d.table[i];
           createNewRow(
             container,
             ogrenci.ad,
@@ -187,10 +185,10 @@ function modalLoadTableContents() {
   fetch("http://localhost:3000/classes/get")
     .then((response) => response.json())
     .then((data) => {
-      size = data.size;
+      size = data.d.size;
       if (size > 0) {
         for (let i = 0; i < size; i++) {
-          ders = data.data[i];
+          ders = data.d.table[i];
           modalCreateNewRow(
             container,
             ders.kod,
@@ -353,6 +351,16 @@ function assignmentModalButtonProperties() {
   closeBtn.addEventListener("click", () => hataliDisappear());
 }
 
+function checkCheckBoxes() {
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const areAllChecked = Array.from(checkboxes).every(
+    (checkbox) => checkbox.checked
+  );
+  checkboxes.forEach((checkbox) => {
+    checkbox.checked = !areAllChecked;
+  });
+}
+
 function clearCheckBoxes() {
   const checkboxes = document.querySelectorAll('input[type="checkbox"]');
   checkboxes.forEach((checkbox) => {
@@ -398,7 +406,7 @@ function classes(index) {
   fetch(`http://localhost:3000/students/getclasses/${index}`)
     .then((response) => response.json())
     .then((data) => {
-      if (data.length !== 0) alert(data.dersler);
+      if (data.d.length !== 0) alert(data.d.dersler);
       else alert("Hiçbir ders atanmadı!");
     })
     .catch((error) => {

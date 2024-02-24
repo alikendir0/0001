@@ -126,7 +126,7 @@ a:active {
   border-radius: 12px;
   margin-bottom: 48px;
   padding: 24px 30px;
-  display: none;
+  display: block;
 }
 
 .noResponse {
@@ -162,6 +162,7 @@ a:active {
   border-radius: 12px;
   margin-top: 102px;
   margin-bottom: 48px;
+  display: none;
 }
 .container tr {
   border-top: 1px solid #ced4da;
@@ -187,6 +188,14 @@ a:active {
   padding: 10px 10px;
   cursor: pointer;
   margin-right: 16px;
+}
+
+.container .select-all-button {
+  border-radius: 12px;
+  color: white;
+  padding: 10px 10px;
+  cursor: pointer;
+  margin: 0px 0px 0px 22px;
 }
 
 .navigation {

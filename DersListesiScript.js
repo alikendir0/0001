@@ -76,7 +76,6 @@ async function deleteClass(classRow) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Message:", data.message);
         checkTableData();
       });
   }
@@ -101,12 +100,10 @@ function updateTableContents(kod, fakulte, zaman, sinif, ogretici) {
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
       if (!data.code == 0) {
         hataliAppear();
         return false;
       } else {
-        console.log(data.message);
         return true;
       }
     })
@@ -124,10 +121,10 @@ function loadTableContents() {
   fetch("http://localhost:3000/classes/get")
     .then((response) => response.json())
     .then((data) => {
-      size = data.size;
+      size = data.d.size;
       if (size > 0) {
         for (let i = 0; i < size; i++) {
-          ders = data.data[i];
+          ders = data.d.table[i];
           createNewRow(
             container,
             ders.kod,
