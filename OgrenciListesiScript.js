@@ -28,9 +28,9 @@ function noResponse() {
 async function checkTableData() {
   var classSize;
   try {
-    const response = await fetch("http://localhost:3000/classes/get");
+    const response = await fetch("http://localhost:3000/courses");
     const data = await response.json();
-    classSize = data.d.size;
+    classSize = data.size;
   } catch (err) {
     console.log(err);
   }
@@ -70,23 +70,31 @@ function submit() {
   const container = document.querySelector(".container");
   const modal = document.getElementById("modal");
   const overlay = document.getElementById("overlay");
+  var id = -1;
 
   updateTableContents(ad, soyad, tcNo, ogrenciNo).then((result) => {
-    if (!result) {
+    if (result === -1) {
       return;
+    } else {
+      id = result;
     }
-    createNewRow(container, ad, soyad, tcNo, ogrenciNo);
+    createNewRow(container, id, ad, soyad, tcNo, ogrenciNo);
     clearInputFields();
     modalDisappear(modal, overlay);
     checkTableData();
   });
 }
 
+function deleteRowById(id) {
+  const row = document.querySelector(`tr[data-id="${id}"]`);
+  if (row) {
+    row.parentNode.removeChild(row);
+  }
+}
+
 async function deleteStudent(studentRow) {
-  studentRow.reverse();
-  const container = document.querySelector(".container");
   for (let i = 0; i < studentRow.length; i++) {
-    fetch(`http://localhost:3000/students/delete/${studentRow[i] - 1}`, {
+    fetch(`http://localhost:3000/student/${studentRow[i]}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -95,52 +103,67 @@ async function deleteStudent(studentRow) {
       });
   }
   for (let i = 0; i < studentRow.length; i++) {
-    container.deleteRow(studentRow[i]);
+    deleteRowById(studentRow[i]);
   }
   killButtonDetector();
   buttonDetector();
 }
 
-function updateTableContents(ad, soyad, tcNo, ogrenciNo) {
-  return fetch("http://localhost:3000/students/add", {
+function getIds() {
+  const checkboxes = document.querySelectorAll(".container .Checkbox");
+  const checkedIds = [];
+
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      const row = checkbox.closest("tr");
+      const id = row.getAttribute("data-id");
+      checkedIds.push(id);
+    }
+  });
+  return checkedIds;
+}
+
+function getCourseIds() {
+  const checkboxes = document.querySelectorAll(".a-container .Checkbox");
+  const checkedIds = [];
+
+  checkboxes.forEach((checkbox) => {
+    if (checkbox.checked) {
+      const row = checkbox.closest("tr");
+      const id = row.getAttribute("data-id");
+      checkedIds.push(id);
+    }
+  });
+  return checkedIds;
+}
+
+function updateTableContents(name, lastName, idNo, studentNo) {
+  return fetch("http://localhost:3000/student", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      ad: ad,
-      soyad: soyad,
-      tcNo: tcNo,
-      ogrenciNo: ogrenciNo,
+      name: name,
+      lastName: lastName,
+      idNo: idNo,
+      studentNo: studentNo,
       dersler: [],
     }),
   })
     .then((response) => response.json())
     .then((data) => {
+      const id = data.data.id;
       var element = document.querySelector(".hatali");
-      switch (data.code) {
-        case 1:
-          element.innerText = "Adınızı Yanlış Girdiniz!";
-          hataliAppear();
-          return false;
-        case 2:
-          element.innerText = "Soyadınızı Yanlış Girdiniz!";
-          hataliAppear();
-          return false;
-        case 3:
-          element.innerText = "T.C. Numaranızı Yanlış Girdiniz!";
-          hataliAppear();
-          return false;
-        case 4:
-          element.innerText = "Öğrenci Numaranızı Yanlış Girdiniz!";
-          hataliAppear();
-          return false;
-        default:
-          return true;
+      if (!data.data instanceof Array) {
+        return id;
+      } else {
+        element.innerText = data.data[0].message;
+        hataliAppear();
+        return -1;
       }
     })
     .catch((error) => {
-      console.error("Error:", error);
       checkTableData();
       return false;
     });
@@ -153,19 +176,20 @@ function loadTableContents() {
   while (container.rows.length > 1) {
     container.deleteRow(container.rows.length - 1);
   }
-  fetch("http://localhost:3000/students/get")
+  fetch("http://localhost:3000/students")
     .then((response) => response.json())
     .then((data) => {
-      size = data.d.size;
+      size = data.data.length;
       if (size > 0) {
         for (let i = 0; i < size; i++) {
-          ogrenci = data.d.table[i];
+          ogrenci = data.data[i];
           createNewRow(
             container,
-            ogrenci.ad,
-            ogrenci.soyad,
-            ogrenci.tcNo,
-            ogrenci.ogrenciNo
+            ogrenci.id,
+            ogrenci.name,
+            ogrenci.lastName,
+            ogrenci.idNo,
+            ogrenci.studentNo
           );
         }
         checkTableData();
@@ -182,20 +206,21 @@ function modalLoadTableContents() {
   while (container.rows.length > 1) {
     container.deleteRow(container.rows.length - 1);
   }
-  fetch("http://localhost:3000/classes/get")
+  fetch("http://localhost:3000/courses")
     .then((response) => response.json())
     .then((data) => {
-      size = data.d.size;
+      size = data.data.length;
       if (size > 0) {
         for (let i = 0; i < size; i++) {
-          ders = data.d.table[i];
+          course = data.data[i];
           modalCreateNewRow(
             container,
-            ders.kod,
-            ders.fakulte,
-            ders.zaman,
-            ders.sinif,
-            ders.ogretici
+            course.id,
+            course.code,
+            course.faculty,
+            course.time,
+            course.place,
+            course.instructor
           );
         }
       }
@@ -211,67 +236,68 @@ function modalSubmit() {
   const table = document.querySelector(".container");
   const atable = document.querySelector(".a-container");
 
-  for (let i = 1; i < table.rows.length; i++) {
-    const row = table.rows[i];
-    const checkbox = row.querySelector('input[type="checkbox"]');
-    if (checkbox.checked) {
-      const classes = getClassCheckedPositions();
-      for (let j = 0; j < classes.length; j++) {
-        const arow = atable.rows[classes[j]];
-        const kod = arow.cells[1].innerText;
-
-        fetch(`http://localhost:3000/students/assign/${i - 1}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            kod: kod,
-          }),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-          });
-      }
-    }
+  const students = getIds();
+  for (let i = 0; i < students.length; i++) {
+    const courses = getCourseIds();
+    fetch(`http://localhost:3000/student/add/course/${students[i]}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        courses: courses,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+      });
   }
-
   clearCheckBoxes();
   modalDisappear(modal, overlay);
   killButtonDetector();
   buttonDetector();
 }
 
-function modalCreateNewRow(container, kod, fakulte, zaman, sinif, ogretici) {
+function modalCreateNewRow(
+  container,
+  id,
+  code,
+  faculty,
+  time,
+  place,
+  instructor
+) {
   const newRow = document.createElement("tr");
+  newRow.setAttribute("data-id", id);
   const checkbox = document.createElement("input");
   const boxCell = document.createElement("td");
-  const kodCell = document.createElement("td");
-  const fakulteCell = document.createElement("td");
-  const zamanCell = document.createElement("td");
-  const sinifCell = document.createElement("td");
-  const ogreticiCell = document.createElement("td");
+  const codeCell = document.createElement("td");
+  const facultyCell = document.createElement("td");
+  const timeCell = document.createElement("td");
+  const placeCell = document.createElement("td");
+  const instructorCell = document.createElement("td");
   checkbox.className = "Checkbox";
   checkbox.type = "checkbox";
-  kodCell.textContent = kod;
-  fakulteCell.textContent = fakulte;
-  zamanCell.textContent = zaman;
-  sinifCell.textContent = sinif;
-  ogreticiCell.textContent = ogretici;
+  codeCell.textContent = code;
+  facultyCell.textContent = faculty;
+  timeCell.textContent = time;
+  placeCell.textContent = place;
+  instructorCell.textContent = instructor;
   newRow.appendChild(boxCell);
   boxCell.appendChild(checkbox);
-  newRow.appendChild(kodCell);
-  newRow.appendChild(fakulteCell);
-  newRow.appendChild(zamanCell);
-  newRow.appendChild(sinifCell);
-  newRow.appendChild(ogreticiCell);
+  newRow.appendChild(codeCell);
+  newRow.appendChild(facultyCell);
+  newRow.appendChild(timeCell);
+  newRow.appendChild(placeCell);
+  newRow.appendChild(instructorCell);
 
   container.appendChild(newRow);
 }
 
-function createNewRow(container, ad, soyad, tcNo, ogrenciNo) {
+function createNewRow(container, id, ad, soyad, tcNo, ogrenciNo) {
   const newRow = document.createElement("tr");
+  newRow.setAttribute("data-id", id);
   const checkbox = document.createElement("input");
   const boxCell = document.createElement("td");
   const adCell = document.createElement("td");
@@ -377,13 +403,13 @@ function clearInputFields() {
 }
 
 function resetClasses() {
-  fetch(`http://localhost:3000/students/deassign`, {
+  fetch(`http://localhost:3000/students/delete/courses`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      indexes: getStudentCheckedPositions(),
+      ids: getIds(),
     }),
   })
     .then((response) => response.json())
@@ -402,11 +428,11 @@ function killButtonDetector() {
   });
 }
 
-function classes(index) {
-  fetch(`http://localhost:3000/students/getclasses/${index}`)
+function classes(id) {
+  fetch(`http://localhost:3000/student/courses/${id}`)
     .then((response) => response.json())
     .then((data) => {
-      if (data.d.length !== 0) alert(data.d.dersler);
+      if (data.data.length !== 0) alert(data.data);
       else alert("Hiçbir ders atanmadı!");
     })
     .catch((error) => {
@@ -417,7 +443,9 @@ function classes(index) {
 function buttonDetector() {
   document.querySelectorAll(".ders-button").forEach((button, index) => {
     button.addEventListener("click", () => {
-      classes(index);
+      const row = button.closest("tr");
+      const id = row.getAttribute("data-id");
+      classes(id);
     });
   });
 }

@@ -67,11 +67,17 @@ function clearInputFields() {
   });
 }
 
+function deleteRowById(id) {
+  const row = document.querySelector(`tr[data-id="${id}"]`);
+  if (row) {
+    row.parentNode.removeChild(row);
+  }
+}
+
 async function deleteClass(classRow) {
-  classRow.reverse();
   const container = document.querySelector(".container");
   for (let i = 0; i < classRow.length; i++) {
-    fetch(`http://localhost:3000/classes/delete/${classRow[i] - 1}`, {
+    fetch(`http://localhost:3000/course/${classRow[i]}`, {
       method: "DELETE",
     })
       .then((response) => response.json())
@@ -80,35 +86,37 @@ async function deleteClass(classRow) {
       });
   }
   for (let i = 0; i < classRow.length; i++) {
-    container.deleteRow(classRow[i]);
+    deleteRowById(classRow[i]);
   }
 }
 
-function updateTableContents(kod, fakulte, zaman, sinif, ogretici) {
-  return fetch("http://localhost:3000/classes/add", {
+function updateTableContents(code, faculty, time, place, instructor) {
+  return fetch("http://localhost:3000/course", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      kod: kod,
-      fakulte: fakulte,
-      zaman: zaman,
-      sinif: sinif,
-      ogretici: ogretici,
+      code: code,
+      faculty: faculty,
+      time: time,
+      place: place,
+      instructor: instructor,
     }),
   })
     .then((response) => response.json())
     .then((data) => {
-      if (!data.code == 0) {
-        hataliAppear();
-        return false;
+      const id = data.data.id;
+      var element = document.querySelector(".hatali");
+      if (!data.data instanceof Array) {
+        return id;
       } else {
-        return true;
+        element.innerText = data.data[0].message;
+        hataliAppear();
       }
+      return -1;
     })
     .catch((error) => {
-      console.error("Error:", error);
       checkTableData();
       return false;
     });
@@ -116,22 +124,23 @@ function updateTableContents(kod, fakulte, zaman, sinif, ogretici) {
 
 function loadTableContents() {
   var size;
-  var ders;
+  var course;
   const container = document.querySelector(".container");
-  fetch("http://localhost:3000/classes/get")
+  fetch("http://localhost:3000/courses")
     .then((response) => response.json())
     .then((data) => {
-      size = data.d.size;
+      size = data.data.length;
       if (size > 0) {
         for (let i = 0; i < size; i++) {
-          ders = data.d.table[i];
+          course = data.data[i];
           createNewRow(
             container,
-            ders.kod,
-            ders.fakulte,
-            ders.zaman,
-            ders.sinif,
-            ders.ogretici
+            course.id,
+            course.code,
+            course.faculty,
+            course.time,
+            course.place,
+            course.instructor
           );
         }
         checkTableData();
@@ -154,50 +163,56 @@ function submit() {
   const container = document.querySelector(".container");
 
   updateTableContents(kod, fakulte, zaman, sinif, ogretici).then((result) => {
-    if (!result) {
+    if (result === -1) {
       return;
+    } else {
+      id = result;
     }
-    createNewRow(container, kod, fakulte, zaman, sinif, ogretici);
+    createNewRow(container, id, kod, fakulte, zaman, sinif, ogretici);
     clearInputFields();
     modalDisappear(modal, overlay);
     checkTableData();
   });
 }
 
-function createNewRow(container, kod, fakulte, zaman, sinif, ogretici) {
+function createNewRow(container, id, code, faculty, time, place, instructor) {
   const newRow = document.createElement("tr");
+  newRow.setAttribute("data-id", id);
   const checkbox = document.createElement("input");
   const boxCell = document.createElement("td");
-  const kodCell = document.createElement("td");
-  const fakulteCell = document.createElement("td");
-  const zamanCell = document.createElement("td");
-  const sinifCell = document.createElement("td");
-  const ogreticiCell = document.createElement("td");
+  const codeCell = document.createElement("td");
+  const facultyCell = document.createElement("td");
+  const timeCell = document.createElement("td");
+  const placeCell = document.createElement("td");
+  const instructorCell = document.createElement("td");
   checkbox.className = "Checkbox";
   checkbox.type = "checkbox";
-  kodCell.textContent = kod;
-  fakulteCell.textContent = fakulte;
-  zamanCell.textContent = zaman;
-  sinifCell.textContent = sinif;
-  ogreticiCell.textContent = ogretici;
+  codeCell.textContent = code;
+  facultyCell.textContent = faculty;
+  timeCell.textContent = time;
+  placeCell.textContent = place;
+  instructorCell.textContent = instructor;
   newRow.appendChild(boxCell);
   boxCell.appendChild(checkbox);
-  newRow.appendChild(kodCell);
-  newRow.appendChild(fakulteCell);
-  newRow.appendChild(zamanCell);
-  newRow.appendChild(sinifCell);
-  newRow.appendChild(ogreticiCell);
+  newRow.appendChild(codeCell);
+  newRow.appendChild(facultyCell);
+  newRow.appendChild(timeCell);
+  newRow.appendChild(placeCell);
+  newRow.appendChild(instructorCell);
 
   container.appendChild(newRow);
 }
 
-function getCheckedPositions() {
-  const checkboxes = document.querySelectorAll(".Checkbox");
-  const checkedPositions = [];
-  checkboxes.forEach((checkbox, index) => {
+function getIds() {
+  const checkboxes = document.querySelectorAll(".container .Checkbox");
+  const checkedIds = [];
+
+  checkboxes.forEach((checkbox) => {
     if (checkbox.checked) {
-      checkedPositions.push(index + 1);
+      const row = checkbox.closest("tr");
+      const id = row.getAttribute("data-id");
+      checkedIds.push(id);
     }
   });
-  return checkedPositions;
+  return checkedIds;
 }
